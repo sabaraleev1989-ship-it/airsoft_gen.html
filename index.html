@@ -3,177 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор Страйкбольных Сценариев</title>
+    <title>Scorpion Tactical Generator</title>
     <style>
         :root {
-            --primary-color: #556b2f; /* Dark Olive Green */
-            --secondary-color: #8fbc8f; /* Dark Sea Green */
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-color: #e0e0e0;
-            --accent-color: #daa520; /* Goldenrod */
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --scorpion-yellow: #ffae00;
+            --scorpion-dark-yellow: #c28500;
+            --bg-black: #0a0a0a;
+            --card-gray: #151515;
+            --text-white: #e0e0e0;
+            --accent-red: #8b0000;
         }
 
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
+            font-family: 'Courier New', Courier, monospace; /* Тактический стиль */
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 15px;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            border: 1px solid #333;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
         }
 
         header {
             text-align: center;
+            border-bottom: 3px solid var(--scorpion-yellow);
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
         }
 
         h1 {
-            color: var(--secondary-color);
+            color: var(--scorpion-yellow);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(255, 174, 0, 0.5);
         }
 
-        /* Секция Настроек */
-        .settings-card {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
+        .badge-icon {
+            font-size: 3rem;
+            margin-bottom: 5px;
         }
 
-        .setting-group {
-            margin-bottom: 15px;
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         label {
-            display: block;
-            margin-bottom: 8px;
+            color: var(--scorpion-yellow);
             font-weight: bold;
-            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
         }
 
         select {
             width: 100%;
             padding: 12px;
-            background-color: #3d3d3d;
-            border: 1px solid #555;
-            border-radius: 4px;
-            color: var(--text-color);
-            font-size: 1rem;
-            appearance: none; /* Убираем стандартную стрелочку */
+            background: #222;
+            border: 1px solid var(--scorpion-dark-yellow);
+            color: white;
+            border-radius: 0;
             cursor: pointer;
         }
 
-        select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .btn-generate {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-color);
-            color: white;
+        .generate-btn {
+            grid-column: span 2;
+            background: var(--scorpion-yellow);
+            color: black;
             border: none;
-            border-radius: 4px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 18px;
+            font-weight: 900;
+            font-size: 1.3rem;
             text-transform: uppercase;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: 0.3s;
         }
 
-        .btn-generate:hover {
-            background-color: #6b8e23;
+        .generate-btn:hover {
+            background: white;
+            box-shadow: 0 0 20px var(--scorpion-yellow);
         }
 
-        .btn-generate:active {
-            transform: translateY(1px);
+        #scenario-output {
+            display: none;
+            border: 2px solid var(--scorpion-yellow);
+            padding: 30px;
+            margin-top: 30px;
+            position: relative;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
         }
 
-        /* Секция Результата */
-        #result-area {
-            display: none; /* Скрыто по умолчанию */
-            margin-top: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-card {
-            background-color: var(--card-bg);
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 5px solid var(--accent-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+        .scen-title {
+            color: var(--scorpion-yellow);
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 25px;
             border-bottom: 1px solid #444;
+            padding-bottom: 10px;
         }
 
-        .scenario-name {
-            color: var(--accent-color);
-            font-size: 1.5rem;
+        .section {
+            margin-bottom: 20px;
         }
 
-        .meta-info {
-            font-size: 0.9rem;
-            color: #aaa;
-            text-align: right;
+        .section-label {
+            color: var(--scorpion-yellow);
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 8px;
+            display: block;
         }
 
-        .result-section {
-            margin-bottom: 15px;
-        }
-
-        .result-section h3 {
-            color: var(--secondary-color);
-            margin-bottom: 5px;
+        .content {
             font-size: 1.1rem;
-        }
-
-        .result-section p {
-            background-color: rgba(255,255,255,0.05);
-            padding: 10px;
-            border-radius: 4px;
+            line-height: 1.5;
+            color: #ccc;
+            text-align: justify;
         }
 
         .twist-box {
-            border: 1px dashed var(--accent-color);
-            color: var(--accent-color);
+            background: rgba(139, 0, 0, 0.1);
+            border: 1px solid var(--accent-red);
+            padding: 15px;
+            margin-top: 20px;
         }
 
+        .twist-box b { color: var(--accent-red); }
+
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            h1 { font-size: 1.5rem; }
-            .result-header { flex-direction: column; align-items: flex-start; }
-            .meta-info { text-align: left; margin-top: 5px; }
+            .settings-grid { grid-template-columns: 1fr; }
+            .generate-btn { grid-column: span 1; }
         }
     </style>
 </head>
@@ -181,150 +150,110 @@
 
 <div class="container">
     <header>
-        <h1>Tactical Scenario Generator</h1>
+        <div class="badge-icon">🦂</div>
+        <h1>Scorpion Scenario Gen</h1>
     </header>
 
-    <div class="settings-card">
-        <div class="setting-group">
-            <label for="terrain">Тип полигона</label>
+    <div class="settings-grid">
+        <div>
+            <label>ТЕРРИТОРИЯ</label>
             <select id="terrain">
-                <option value="any">Любой</option>
-                <option value="forest">Лес / Зеленка</option>
-                <option value="cqb">CQB / Здание</option>
-                <option value="urban">Урбан / Стройка</option>
+                <option value="forest">ЛЕСНОЙ МАССИВ</option>
+                <option value="urban">УРБАН / ЗАСТРОЙКА</option>
+                <option value="cqb">CQB (ПОМЕЩЕНИЯ)</option>
             </select>
         </div>
-
-        <div class="setting-group">
-            <label for="players">Количество игроков</label>
-            <select id="players">
-                <option value="small">Малая группа (до 15)</option>
-                <option value="medium" selected>Средняя (15 - 50)</option>
-                <option value="large">Масштаб (50+)</option>
+        <div>
+            <label>ИНТЕНСИВНОСТЬ</label>
+            <select id="intensity">
+                <option value="low">РАЗВЕДКА (НИЗКАЯ)</option>
+                <option value="med" selected>КОНТАКТ (СРЕДНЯЯ)</option>
+                <option value="high">МЯСОРУБКА (ВЫСОКАЯ)</option>
             </select>
         </div>
-
-        <button class="btn-generate" onclick="generateScenario()">Сгенерировать миссию</button>
+        <button class="generate-btn" onclick="generate()">Сформировать приказ</button>
     </div>
 
-    <div id="result-area">
-        <div class="result-card">
-            <div class="result-header">
-                <div class="scenario-name" id="scen-name">Название Миссии</div>
-                <div class="meta-info">
-                    <span id="scen-meta-terrain">Лес</span> | 
-                    <span id="scen-meta-players">~30 чел</span>
-                </div>
-            </div>
+    <div id="scenario-output">
+        <div class="scen-title" id="out-title">КОДОВОЕ НАЗВАНИЕ</div>
+        
+        <div class="section">
+            <span class="section-label">ОПЕРАТИВНАЯ СВОДКА (ЛЕГЕНДА):</span>
+            <div class="content" id="out-lore"></div>
+        </div>
 
-            <div class="result-section">
-                <h3>Легенда</h3>
-                <p id="scen-lore">Описание предыстории.</p>
-            </div>
+        <div class="section">
+            <span class="section-label">БОЕВАЯ ЗАДАЧА:</span>
+            <div class="content" id="out-task"></div>
+        </div>
 
-            <div class="result-section">
-                <h3>Задачи</h3>
-                <p id="scen-task">Что нужно сделать.</p>
-            </div>
-
-            <div class="result-section twist-box">
-                <h3>Тактическое усложнение ("Твист")</h3>
-                <p id="scen-twist">Особые условия.</p>
-            </div>
+        <div class="twist-box">
+            <b>ВВОДНАЯ "СКОРПИОН":</b> <span id="out-twist"></span>
         </div>
     </div>
 </div>
 
 <script>
-    // БАЗА ДАННЫХ КОМПОНЕНТОВ СЦЕНАРИЕВ
+const data = {
+    titles: ["Острый хвост", "Песчаная буря", "Яд тишины", "Черная метка", "Жало", "Стальной панцирь", "Ночной охотник", "Смертельный укус", "Клешни", "Пустынный призрак"],
     
-    const names = [
-        "Черный Ящик", "Заря", "Эвакуация VIP", "Высота 777", "Прорыв", 
-        "Операция 'Магистраль'", "Конвой", "Спящий Агент", "Охота на Снайпера", "Ценный Груз"
-    ];
+    lores: [
+        "Разведка докладывает: в данном квадрате зафиксирована активность наемников. По нашим данным, они удерживают зашифрованный кейс с кодами доступа к спутниковой сети. Если информация утечет — весь регион окажется под угрозой. Ваша группа выдвигается в качестве передового отряда для перехвата инициативы. Сопротивление ожидается организованное и агрессивное.",
+        "После крушения транспортного вертолета в зоне ответственности нашего подразделения, пропал важный сотрудник корпорации 'Aegis'. Поисковые маяки молчат. Местные радикальные группировки уже начали прочесывать местность. Ваша задача — опередить противника и обеспечить безопасный коридор для эвакуации, пока кольцо окружения не замкнулось.",
+        "Старый промышленный сектор стал камнем преткновения между двумя ЧВК. Объект имеет стратегическое значение из-за системы подземных коммуникаций. Командование отдало приказ: занять ключевые узлы связи и удерживать их любой ценой. Будьте готовы к тому, что противник задействует тяжелые штурмовые щиты и дымовые завесы.",
+        "Внимание, группы! В секторе обнаружен схрон с химоружием, оставленный при отступлении регулярных войск. Группа 'Север' должна произвести дезактивацию, группа 'Юг' получила приказ не допустить этого, так как имеет свои планы на данные ресурсы. Погода ухудшается, связь будет нестабильной.",
+        "Мирная демонстрация в пригороде переросла в вооруженный конфликт. Под прикрытием хаоса, диверсионная группа противника закрепилась в ключевых зданиях. Нам нужно выбить их оттуда до прихода основных сил. Спецсредства разрешены, огонь на подавление — по готовности."
+    ],
 
-    const objectivePool = {
-        // Задачи, подходящие для леса
+    tasks: {
         forest: [
-            { task: "Стороне А найти сбитый БПЛА в центральном квадрате, забрать флешку и доставить в штаб. Стороне Б - перехватить флешку или уничтожить курьера.", twist: "Курьер может использовать только вторичное оружие при переносе флешки." },
-            { task: "Классический захват флага. Флаги находятся на базах команд. Задача - принести флаг противника на свою базу.", twist: "Ограничение боезапаса: только механы, дозарядка только на мертвяке." },
-            { task: "Удержание контрольной точки (высоты/бункера). Побеждает команда, суммарно владевшая точкой 30 минут.", twist: "Использование дымов запрещено из-за пожароопасности (или наоборот, поощряется)." }
+            "Установить контроль над тремя точками: 'Вышка', 'Родник' и 'Овраг'. Удержание каждой точки дает очки каждые 5 минут.",
+            "Найти в лесу разбитый ящик с боеприпасами, эвакуировать его на свою базу. Ящик тяжелый, нести можно только вдвоем.",
+            "Провести VIP-персону через лесную тропу к точке эвакуации. Вторая команда устраивает засады по всему маршруту."
         ],
-        // Задачи для зданий
-        cqb: [
-            { task: "Зачистка здания. Сторона А обороняет 3 этаж. Сторона Б должна зачистить все комнаты. Игра на время.", twist: "Обороне разрешен только 1 щит, атаке щиты запрещены." },
-            { task: "Освобождение заложника. Заложник (игрок без оружия) находится в дальней комнате. Атаке нужно вывести его наружу.", twist: "Заложник может сбежать, если его охранник убит и рядом нет других бойцов обороны." },
-            { task: "Установка бомбы. Атака должна установить электронный таймер в центральном зале и защищать его 10 минут до 'взрыва'.", twist: "Только один игрок в команде атаки (инженер) имеет право устанавливать/снимать бомбу." }
-        ],
-        // Задачи для урбана (смешанный тип)
         urban: [
-            { task: "Проводка VIP через условную улицу. VIP должен дойти живым до точки эвакуации.", twist: "У VIP есть 2 бинта для самопомощи, у остальных игроков медиков нет." },
-            { task: "Сбор разведданных. По полигону спрятано 5 кейсов. Командам нужно собрать большинство и доставить в штаб.", twist: "Появилась третья сторона (террористы, 3-5 чел), воюющая против всех." },
-            { task: "Уничтожение радиостанции. Сторона А удерживает здание радиостанции, Сторона Б должна коснуться макета радиостанции рукой.", twist: "Ранения: при попадании в конечность игрок падает и ждет медика 2 минуты." }
+            "Захватить центральное здание и вывесить флаг на крыше. Удерживать флаг до конца раунда.",
+            "Обеим командам необходимо собрать 10 разбросанных по полигону 'энергоблоков'. Чья команда принесет больше в свой штаб — та победила.",
+            "Штурм укрепленного штаба. У обороны одна жизнь, у атаки — бесконечный респаун, но ограниченное время (15 минут)."
+        ],
+        cqb: [
+            "Разминирование: Атака должна найти и отключить таймер. Оборона знает расположение, но не может подходить к нему ближе 3 метров.",
+            "Встречный бой за центральный холл. Каждые 2 минуты в игру вступает 'джаггернаут' со щитом на стороне проигрывающей команды.",
+            "Зачистка всех комнат этажа. Каждая комната считается захваченной, если внутри не осталось противника и оставлен маркер."
         ]
-    };
+    },
 
-    const loreTemplates = [
-        "По данным разведки, в этом секторе потерпел крушение разведывательный спутник...",
-        "Местный полевой командир захватил в заложники журналиста...",
-        "Радикальная группировка захватила заброшенный химический завод...",
-        "Элитный отряд попал в засаду при транспортировке кодов доступа...",
-        "Старый бункер времен холодной войны оказался не таким уж пустым...",
-        "Две частные военные компании не поделили контракт на охрану объекта..."
-    ];
+    twists: [
+        "Ранение в руку — нельзя использовать привод (только пистолет). Ранение в ногу — только ползком или с помощью товарища.",
+        "Радиомолчание: использование раций запрещено. Только жесты и голосовые команды.",
+        "Последний шанс: если вас убили, вы можете остаться на месте как 'раненый' еще на 5 минут и передавать информацию голосом.",
+        "Ограниченный БК: использовать можно только один магазин (механу), дозарядка запрещена до захвата точки снабжения.",
+        "Предатель: в каждой команде есть один игрок, который по сигналу ракетницы переходит на сторону врага.",
+        "Дымовая завеса: каждые 10 минут организаторы (или мертвые) активируют дымы в случайных точках."
+    ]
+};
 
-    const sizeMap = {
-        small: "до 15 чел",
-        medium: "15 - 50 чел",
-        large: "50+ чел"
-    };
+function generate() {
+    const terrain = document.getElementById('terrain').value;
+    const output = document.getElementById('scenario-output');
+    
+    // Генерируем случайный набор
+    const title = data.titles[Math.floor(Math.random() * data.titles.length)];
+    const lore = data.lores[Math.floor(Math.random() * data.lores.length)];
+    const taskList = data.tasks[terrain];
+    const task = taskList[Math.floor(Math.random() * taskList.length)];
+    const twist = data.twists[Math.floor(Math.random() * data.twists.length)];
 
-    // ГЛАВНАЯ ФУНКЦИЯ ГЕНЕРАЦИИ
-    function generateScenario() {
-        // 1. Получаем настройки от пользователя
-        const terrainInput = document.getElementById('terrain').value;
-        const playersInput = document.getElementById('players').value;
+    // Вывод
+    document.getElementById('out-title').innerText = "ОПЕРАЦИЯ: " + title.toUpperCase();
+    document.getElementById('out-lore').innerText = lore;
+    document.getElementById('out-task').innerText = task;
+    document.getElementById('out-twist').innerText = twist;
 
-        // 2. Логика выбора типа полигона
-        let validTerrains = [];
-        if (terrainInput === 'any') {
-            validTerrains = ['forest', 'cqb', 'urban'];
-        } else {
-            validTerrains = [terrainInput];
-        }
-        
-        // Случайно выбираем один из доступных типов (если был 'any')
-        const selectedTerrain = validTerrains[Math.floor(Math.random() * validTerrains.length)];
-
-        // 3. Выбор задач на основе типа полигона
-        const currentObjectivePool = objectivePool[selectedTerrain];
-        
-        // Масштабируемость: Если игроков мало, убираем сложные сценарии (в этом примере просто выбор)
-        const scenarioPair = currentObjectivePool[Math.floor(Math.random() * currentObjectivePool.length)];
-
-        // 4. Подстановка данных в интерфейс
-        
-        // Рандомное название
-        document.getElementById('scen-name').innerText = names[Math.floor(Math.random() * names.length)];
-        
-        // Мета-данные
-        const terrainNamesToRu = { forest: "Лес", cqb: "Здание", urban: "Урбан" };
-        document.getElementById('scen-meta-terrain').innerText = terrainNamesToRu[selectedTerrain];
-        document.getElementById('scen-meta-players').innerText = sizeMap[playersInput];
-        
-        // Легенда, Задача и Твист
-        document.getElementById('scen-lore').innerText = loreTemplates[Math.floor(Math.random() * loreTemplates.length)];
-        document.getElementById('scen-task').innerText = scenarioPair.task;
-        document.getElementById('scen-twist').innerText = scenarioPair.twist;
-
-        // 5. Показываем область результата с анимацией
-        const resultArea = document.getElementById('result-area');
-        resultArea.style.display = 'block';
-        
-        // Прокрутка вниз к результату на мобильных
-        resultArea.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Показываем результат
+    output.style.display = 'block';
+    window.scrollTo({ top: output.offsetTop, behavior: 'smooth' });
+}
 </script>
-
 </body>
 </html>
