@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SCORPION.GEN 4.0</title>
+    <title>SCORPION.GEN 4.1</title>
     <link rel="apple-touch-icon" href="icon.png">
     <meta name="theme-color" content="#c5a059">
     <style>
-        :root { --gold: #c5a059; --dark-gold: #8b6d31; --bg: #050505; --red: #a80000; --text: #e5e5e5; }
+        :root { --gold: #c5a059; --dark-gold: #8b6d31; --bg: #050505; --red: #a80000; --text: #e5e5e5; --bright-red: #ff3333; --bright-blue: #33aaff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 500px; border: 1px solid var(--gold); background: var(--bg); position: relative; min-height: 95vh; padding-bottom: 20px;}
         .version-tag { position: absolute; top: 12px; left: 15px; color: var(--gold); font-size: 10px; font-weight: bold; text-transform: uppercase; }
@@ -22,10 +22,12 @@
         .scen-title { color: var(--gold); font-size: 20px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
         h3 { color: var(--gold); font-size: 13px; text-transform: uppercase; margin: 20px 0 8px; display: flex; align-items: center; border-left: 3px solid var(--gold); padding-left: 10px; }
         .text-block { font-size: 14px; line-height: 1.5; color: #ccc; background: rgba(255,255,255,0.03); padding: 12px; margin-bottom: 10px; white-space: pre-line; }
-        .team-box { margin-bottom: 15px; border-left: 2px solid #555; padding-left: 10px; }
-        .team-a { border-color: #4d94ff; } .team-b { border-color: #ff4d4d; }
-        .team-name { font-weight: bold; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
-        .team-a .team-name { color: #4d94ff; } .team-b .team-name { color: #ff4d4d; }
+        .team-box { margin-bottom: 15px; border-left: 3px solid #555; padding-left: 12px; }
+        .team-a { border-color: var(--bright-red); } 
+        .team-b { border-color: var(--bright-blue); }
+        .team-name { font-weight: bold; font-size: 13px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1px; }
+        .team-a .team-name { color: var(--bright-red); } 
+        .team-b .team-name { color: var(--bright-blue); }
         .rules-box { border: 1px solid var(--red); background: rgba(168, 0, 0, 0.08); padding: 15px; margin-top: 20px; }
         .rules-list { font-size: 13px; padding-left: 18px; color: #ff9999; margin: 0; }
     </style>
@@ -33,7 +35,7 @@
 <body>
 
 <div class="app-container">
-    <div class="version-tag">scorpion.gen 4.0 | 1000+ SCENARIOS</div>
+    <div class="version-tag">scorpion.gen 4.1 | RED VS BLUE</div>
     <header><h1>Сценарии к играм</h1></header>
     <div class="settings">
         <label>Локация</label>
@@ -60,12 +62,12 @@
         
         <h3>Задачи сторон</h3>
         <div class="team-box team-a">
-            <div class="team-name">ГРУППА А (Атака / Желтые)</div>
-            <div id="out-task-a" class="text-block" style="background: none; padding: 0;"></div>
+            <div class="team-name">ГРУППА А (Атака / КРАСНЫЕ)</div>
+            <div id="out-task-a" class="text-block" style="background: none; padding: 0; margin-bottom: 0;"></div>
         </div>
         <div class="team-box team-b">
-            <div class="team-name">ГРУППА Б (Оборона / Синие)</div>
-            <div id="out-task-b" class="text-block" style="background: none; padding: 0;"></div>
+            <div class="team-name">ГРУППА Б (Оборона / СИНИЕ)</div>
+            <div id="out-task-b" class="text-block" style="background: none; padding: 0; margin-bottom: 0;"></div>
         </div>
 
         <div class="rules-box">
@@ -76,11 +78,10 @@
 </div>
 
 <script>
+// Тот же массив данных с 300+ комбинациями
 const dataBank = {
     forest: {
-        lores: [
-            "Разведка обнаружила в глубине леса зашифрованный маяк связи.", "В квадрате приземлился груз с секретными чертежами ПВО.", "Группа наемников готовит подрыв важной лесной переправы.", "Сбитый пилот скрывается в зеленке, у него ключи от штаба.", "Противник развернул в лесу мобильную точку сбора данных.", "Обнаружен заброшенный склад медикаментов старой армии.", "В лесу замечена группа диверсантов, закладывающая мины.", "Разведывательный дрон упал в труднодоступном секторе леса.", "По данным ГРУ, здесь находится скрытая база снабжения врага.", "Радиоперехват выявил точку встречи двух вражеских связных."
-        ],
+        lores: ["Разведка обнаружила в глубине леса зашифрованный маяк связи.", "В квадрате приземлился груз с секретными чертежами ПВО.", "Группа наемников готовит подрыв важной лесной переправы.", "Сбитый пилот скрывается в зеленке, у него ключи от штаба.", "Противник развернул в лесу мобильную точку сбора данных.", "Обнаружен заброшенный склад медикаментов старой армии.", "В лесу замечена группа диверсантов, закладывающая мины.", "Разведывательный дрон упал в труднодоступном секторе леса.", "По данным ГРУ, здесь находится скрытая база снабжения врага.", "Радиоперехват выявил точку встречи двух вражеских связных."],
         objs: ["маяк связи", "секретный кейс", "мост (ориентир)", "пилота", "серверный терминал", "ящики с БК", "генератор", "сбитый дрон", "карту минных полей", "офицера"],
         actions: [
             { a: "Найти [OBJ] и удерживать 15 минут.", b: "Защищать [OBJ], не давая противнику занять периметр." },
@@ -89,9 +90,7 @@ const dataBank = {
         ]
     },
     mixed: {
-        lores: [
-            "Комплекс зданий в лесу превращен в центр допросов противника.", "В лесу около промзоны застряла машина с топливом.", "Старая подстанция питает радар в лесном массиве.", "В здании удерживают инженера, знающего коды запуска.", "В заброшенной лаборатории хранятся образцы хим-оружия.", "Окраина леса используется врагом для корректировки огня.", "Промзона стала точкой сбора штурмовых отрядов противника.", "В здании развернут штаб управления лесными патрулями.", "На крыше объекта установлен комплекс РЭБ.", "Объект 'Зеро' окружен лесом, там замечена активность VIP."
-        ],
+        lores: ["Комплекс зданий в лесу превращен в центр допросов противника.", "В лесу около промзоны застряла машина с топливом.", "Старая подстанция питает радар в лесном массиве.", "В здании удерживают инженера, знающего коды запуска.", "В заброшенной лаборатории хранятся образцы хим-оружия.", "Окраина леса используется врагом для корректировки огня.", "Промзона стала точкой сбора штурмовых отрядов противника.", "В здании развернут штаб управления лесными патрулями.", "На крыше объекта установлен комплекс РЭБ.", "Объект 'Зеро' окружен лесом, там замечена активность VIP."],
         objs: ["штабную рацию", "грузовик (маркер)", "подстанцию", "инженера", "образцы вируса", "пункт наведения", "точку сбора", "карту лесных дорог", "антенну РЭБ", "VIP-персону"],
         actions: [
             { a: "Отключить питание в лесу и штурмовать здание для захвата [OBJ].", b: "Распределить силы между лесом и обороной здания с [OBJ]." },
@@ -100,9 +99,7 @@ const dataBank = {
         ]
     },
     cqb: {
-        lores: [
-            "Здание заблокировано автоматикой. Внутри активирована бомба.", "Офисный центр захвачен боевиками для обмена данными.", "В подвале комплекса скрывается лидер ячейки наемников.", "Серверная комната содержит данные о всех агентах в регионе.", "В здании находится склад запрещенного снаряжения.", "Патруль противника зажат в здании, идет попытка прорыва.", "Внутри комплекса заложена 'грязная' бомба.", "В здании проводится секретное совещание командиров.", "Объект содержит единственный работающий терминал связи.", "В коридорах заложены ловушки, здание под охраной 'элиты'."
-        ],
+        lores: ["Здание заблокировано автоматикой. Внутри активирована бомба.", "Офисный центр захвачен боевиками для обмена данными.", "В подвале комплекса скрывается лидер ячейки наемников.", "Серверная комната содержит данные о всех агентах в регионе.", "В здании находится склад запрещенного снаряжения.", "Патруль противника зажат в здании, идет попытка прорыва.", "Внутри комплекса заложена 'грязная' бомба.", "В здании проводится секретное совещание командиров.", "Объект содержит единственный работающий терминал связи.", "В коридорах заложены ловушки, здание под охраной 'элиты'."],
         objs: ["таймер бомбы", "ноутбук", "лидера", "жесткий диск", "ящик с БК", "черный ход", "активатор", "сейф с кодами", "главный сервер", "план эвакуации"],
         actions: [
             { a: "Проникнуть в центр и захватить [OBJ] за 10 минут.", b: "Удерживать [OBJ]. В случае контакта — эвакуировать на 2 этаж." },
@@ -118,7 +115,7 @@ const tactics = {
     large: ["Фронтальное подавление огнем.", "Работа тремя эшелонами.", "Снайперская поддержка из тыла."]
 };
 
-function getQueueKey(terrain, players) { return `v4_queue_${terrain}_${players}`; }
+function getQueueKey(terrain, players) { return `v41_queue_${terrain}_${players}`; }
 
 function generate() {
     const terrain = document.getElementById('terrain').value;
@@ -127,10 +124,8 @@ function generate() {
     
     let queue = JSON.parse(localStorage.getItem(key) || "[]");
     
-    // Если очередь пуста, генерируем НОВЫЙ список на сотни комбинаций
     if (queue.length === 0) {
         const db = dataBank[terrain];
-        // Комбинируем: 10 легенд * 10 объектов * 3 типа действий = 300 комбинаций
         for(let l=0; l<db.lores.length; l++) {
             for(let o=0; o<db.objs.length; o++) {
                 for(let a=0; a<db.actions.length; a++) {
@@ -138,7 +133,6 @@ function generate() {
                 }
             }
         }
-        // Перемешивание (Fisher-Yates)
         for (let i = queue.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [queue[i], queue[j]] = [queue[j], queue[i]];
@@ -152,14 +146,12 @@ function generate() {
     const lore = db.lores[current.l];
     const objName = db.objs[current.o];
     const mission = db.actions[current.a];
-    const tac = tactics[players][Math.floor(Math.random()*tactics.length)];
 
     document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + (["АРГО", "ВУЛКАН", "СКИФ", "НЕПТУН", "ЗЕНИТ", "МАРС", "ГРАД"][Math.floor(Math.random()*7)]);
-    document.getElementById('out-meta').innerText = `${terrain} | В БАЗЕ ЕЩЕ ${queue.length} ВАР-ОВ`;
+    document.getElementById('out-meta').innerText = `${terrain} | УНИКАЛЬНЫХ В БАЗЕ: ${queue.length}`;
     document.getElementById('out-lore').innerText = lore;
     
-    // Подставляем объект в текст задачи
-    document.getElementById('out-task-a').innerText = mission.a.replace("[OBJ]", objName.toUpperCase()) + "\n\nТАКТИКА: " + tactics[players][Math.floor(Math.random()*3)];
+    document.getElementById('out-task-a').innerText = mission.a.replace("[OBJ]", objName.toUpperCase()) + "\n\nРЕКОМЕНДАЦИЯ: " + tactics[players][Math.floor(Math.random()*3)];
     document.getElementById('out-task-b').innerText = mission.b.replace("[OBJ]", objName.toUpperCase());
 
     const presets = [
@@ -172,6 +164,7 @@ function generate() {
     ul.innerHTML = ""; p.rules.forEach(r => ul.innerHTML += `<li>${r}</li>`);
 
     document.getElementById('output').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('output').offsetTop - 20, behavior: 'smooth' });
 }
 </script>
 </body>
