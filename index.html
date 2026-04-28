@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCORPION.GEN 2.0</title>
+    
+    <link rel="apple-touch-icon" href="icon.png">
+    
     <style>
         :root {
             --gold: #c5a059; /* Песочное золото шеврона */
@@ -15,38 +18,39 @@
         }
 
         body {
-            font-family: 'Tahoma', 'Geneva', sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
             padding: 10px;
+            display: flex;
+            justify-content: center;
         }
 
-        /* Общий контейнер */
         .app-container {
-            max-width: 600px;
-            margin: 0 auto;
-            border: 2px solid var(--gold);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--gold);
             background: var(--bg);
             position: relative;
-            padding-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* Маркировка версии */
+        /* Надпись версии слева сверху */
         .version-tag {
             position: absolute;
-            top: 10px;
+            top: 12px;
             left: 15px;
             color: var(--gold);
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
             letter-spacing: 1px;
-            opacity: 0.8;
+            text-transform: uppercase;
         }
 
         header {
             text-align: center;
-            padding: 30px 10px 10px;
+            padding: 40px 10px 15px;
             border-bottom: 1px solid var(--gold);
         }
 
@@ -54,11 +58,10 @@
             color: var(--gold);
             text-transform: uppercase;
             font-size: 18px;
-            letter-spacing: 3px;
-            margin: 10px 0;
+            letter-spacing: 2px;
+            margin: 0;
         }
 
-        /* Настройки */
         .settings {
             padding: 20px;
             display: grid;
@@ -85,39 +88,31 @@
             padding: 12px;
             font-size: 14px;
             outline: none;
+            border-radius: 0;
         }
 
         .btn-gen {
             background: var(--gold);
             color: black;
             border: none;
-            padding: 15px;
-            font-weight: bold;
+            padding: 16px;
+            font-weight: 900;
             text-transform: uppercase;
             cursor: pointer;
             margin-top: 10px;
-            transition: 0.2s;
+            font-size: 14px;
         }
 
-        .btn-gen:hover { background: white; }
+        .btn-gen:active {
+            background: white;
+        }
 
-        /* Вывод сценария */
+        /* Область вывода результата */
         #output {
             display: none;
             padding: 20px;
             border-top: 2px solid var(--gold);
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .scen-header {
-            border-bottom: 1px solid #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            background: linear-gradient(to bottom, #0a0a0a, #050505);
         }
 
         .scen-title {
@@ -125,21 +120,31 @@
             font-size: 20px;
             font-weight: bold;
             text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
         .scen-meta {
             font-size: 12px;
             color: #888;
-            margin-top: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
         h3 {
             color: var(--gold);
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
-            margin: 15px 0 5px;
-            border-left: 3px solid var(--gold);
-            padding-left: 10px;
+            margin: 20px 0 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        h3::before {
+            content: "";
+            width: 4px;
+            height: 14px;
+            background: var(--gold);
+            margin-right: 10px;
         }
 
         .text-block {
@@ -147,38 +152,48 @@
             line-height: 1.6;
             color: #ccc;
             background: rgba(255,255,255,0.03);
-            padding: 10px;
+            padding: 12px;
+            border-radius: 2px;
+            text-align: justify;
         }
 
-        /* Блок Вводной (Красный) */
+        /* Красный блок вводной */
         .rules-box {
             border: 1px solid var(--red);
-            background: rgba(168, 0, 0, 0.05);
+            background: rgba(168, 0, 0, 0.08);
             padding: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .rules-box h4 {
-            color: var(--red);
+            color: #ff4d4d;
             margin: 0 0 10px 0;
             text-transform: uppercase;
             font-size: 13px;
+            font-weight: bold;
         }
 
         .rules-list {
             font-size: 13px;
             margin: 0;
-            padding-left: 15px;
+            padding-left: 18px;
             color: #ff9999;
         }
 
-        .rules-list li { margin-bottom: 8px; }
+        .rules-list li {
+            margin-bottom: 10px;
+        }
+
+        .rules-list b {
+            color: white;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="version-tag">SCORPION.GEN 2.0</div>
+    <div class="version-tag">scorpion.gen 2.0</div>
     
     <header>
         <h1>Сценарии к играм</h1>
@@ -189,17 +204,17 @@
             <label>Тип полигона</label>
             <select id="terrain">
                 <option value="forest">Лесной массив</option>
-                <option value="urban">Урбан / Здания</option>
-                <option value="cqb">CQB (Тесные помещения)</option>
+                <option value="urban">Урбан / Застройка</option>
+                <option value="cqb">CQB (Помещения)</option>
             </select>
         </div>
 
         <div class="input-group">
             <label>Состав групп</label>
             <select id="players">
-                <option value="10-20">Малые группы (10-20 чел)</option>
-                <option value="20-50" selected>Средний состав (20-50 чел)</option>
-                <option value="50+">Большой сбор (50+ чел)</option>
+                <option value="10-20">10 - 20 человек</option>
+                <option value="20-50" selected>20 - 50 человек</option>
+                <option value="50+">50+ человек (Масштаб)</option>
             </select>
         </div>
 
@@ -207,10 +222,8 @@
     </div>
 
     <div id="output">
-        <div class="scen-header">
-            <div id="out-name" class="scen-title">ОПЕРАЦИЯ: НЕИЗВЕСТНО</div>
-            <div id="out-meta" class="scen-meta">Лес | 20-50 чел</div>
-        </div>
+        <div id="out-name" class="scen-title">ОПЕРАЦИЯ: НЕИЗВЕСТНО</div>
+        <div id="out-meta" class="scen-meta">Тип местности | Состав</div>
 
         <h3>Оперативная легенда</h3>
         <div id="out-lore" class="text-block"></div>
@@ -228,33 +241,27 @@
 
 <script>
 const library = {
-    names: ["Черный песок", "Укус кобры", "Спящий скорпион", "Стальное жало", "Гром в горах", "Тень Адлера"],
+    names: ["Черное Жало", "Песчаный Плен", "Тихий Выстрел", "Стальной Панцирь", "Ночной Охотник", "Горный Узел"],
     
     lores: [
-        "Внимание! Разведка перехватила данные о секретной поставке медикаментов и боеприпасов для повстанцев. Груз замаскирован под гражданские ящики и находится в транзитной зоне. Ваша задача — взять зону под контроль до прибытия основных сил противника. В случае обнаружения превосходящих сил — перейти к глухой обороне периметра. Ошибка недопустима, на кону снабжение всего южного фронта.",
-        "Критическая ситуация: в заброшенном секторе связи произошел сбой системы оповещения. По нашим данным, диверсионная группа уже закрепилась на узловых точках и готовит подрыв ретранслятора. Если связь будет потеряна, мы не сможем координировать авиацию. Группа 'Скорпион' выдвигается для немедленной зачистки и восстановления контроля над терминалами связи.",
-        "Чрезвычайное происшествие. В ходе патрулирования был сбит союзный дрон-разведчик. На его борту — жесткий диск с координатами наших складов. Координаты падения известны приблизительно. Противник уже выслал поисковые отряды. Вам необходимо прочесать квадрат, найти обломки и уничтожить носитель информации, либо доставить его в точку эвакуации."
+        "По данным разведки, в этом квадрате замечена активность диверсионной группы. Противник удерживает зашифрованный кейс с кодами управления спутниками. Если информация будет передана, мы потеряем связь во всем регионе. Команда 'Скорпион' должна перехватить инициативу, обнаружить штаб врага и нейтрализовать угрозу до заката.",
+        "Критический сбой: транспортный вертолет с важным грузом совершил аварийную посадку. Территория падения кишит патрулями наемников. Группам необходимо оцепить район, найти бортовой самописец и удержать точку эвакуации до прибытия подкрепления. Будьте осторожны — противник хорошо вооружен и использует тепловизоры.",
+        "Старый складской комплекс стал точкой интереса для двух ЧВК. Объект содержит запасы горючего, необходимые для продолжения наступления. Командование приказало закрепиться на объекте и выбить противника из прилегающих зданий. Каждый метр будет стоить усилий, используйте тактические щиты и дымы."
     ],
 
     tasks: {
-        forest: "Захват и удержание 3-х контрольных точек в течение 30 минут. Команда А стартует с северного респауна, Команда Б — с южного. Дозарядка разрешена только на контрольных точках.",
-        urban: "Поиск и эвакуация 'Ценного сотрудника' (игрок в ярком жилете). Атака должна вывести его за периметр зданий, Оборона — удерживать в подвале. Время на операцию: 40 минут.",
-        cqb: "Встречный бой за центральный терминал. Задача: занести в комнату терминала свой кейс и удерживать его 10 минут. В случае выноса кейса противником таймер сбрасывается."
+        forest: "Поиск и захват 3-х флагов, рассредоточенных по лесу. За каждый доставленный на базу флаг команда получает очки. Дозарядка разрешена только у штабного ящика.",
+        urban: "Штурм и удержание двухэтажного здания. Задача Атаки — вывесить свой флаг на крыше. Задача Обороны — не допустить касания флага в течение 30 минут.",
+        cqb: "Ближний бой. Задача — найти в одной из комнат электронную бомбу и деактивировать её. Обороне запрещено блокировать двери мебелью."
     },
 
-    // ЧЕТКИЕ ПРАВИЛА ПОРАЖЕНИЯ
+    // КОНКРЕТНЫЕ ПРАВИЛА ПОРАЖЕНИЯ
     hitRules: [
-        [
-            "<b>Попадание в корпус:</b> Мгновенная смерть. Игрок поднимает красную тряпку и уходит в мертвяк.",
-            "<b>Попадание в конечность:</b> Ранение. Игрок обязан упасть, громко крикнуть 'Ранен!' и может только отстреливаться из пистолета (при ранении в руку) или только ползти (при ранении в ногу).",
-            "<b>Повторное попадание в раненого:</b> Смерть. Игрок уходит в мертвяк.",
-            "<b>Лечение:</b> Другой игрок может перебинтовать раненого (30 секунд контакта). После бинтования игрок полностью в строю."
-        ],
-        [
-            "<b>Попадание в любую часть тела:</b> Игрок считается раненым. Должен сесть на месте, не может стрелять и говорить. Ждет медика 3 минуты.",
-            "<b>Если медик не успел:</b> Игрок считается 'истекшим кровью' и уходит в мертвяк.",
-            "<b>Попадание в привод:</b> Оружие выведено из строя до конца жизни. Игрок может использовать только вторичку или нож."
-        ]
+        "<b>Попадание в корпус или голову:</b> Мгновенная смерть. Игрок поднимает красную повязку и следует в мертвяк.",
+        "<b>Попадание в руку:</b> Тяжелое ранение. Нельзя использовать основное оружие. Разрешена только вторичка (пистолет) в здоровой руке. Требуется бинтование в течение 2 минут.",
+        "<b>Попадание в ногу:</b> Тяжелое ранение. Передвижение только ползком или с помощью товарища. Требуется бинтование.",
+        "<b>Повторное попадание в раненого:</b> Окончательная смерть.",
+        "<b>Лечение:</b> Бинтование любым товарищем. Время наложения бинта — честные 30 секунд. После этого боец снова в строю."
     ]
 };
 
@@ -262,30 +269,32 @@ function generate() {
     const terrain = document.getElementById('terrain').value;
     const players = document.getElementById('players').value;
     
-    // Название и легенда
+    // Рандом названия и легенды
     document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + library.names[Math.floor(Math.random() * library.names.length)];
     document.getElementById('out-lore').innerText = library.lores[Math.floor(Math.random() * library.lores.length)];
     
-    // Мета (Тип и кол-во человек)
-    const tMap = {forest: "Лес", urban: "Урбан", cqb: "CQB"};
-    document.getElementById('out-meta').innerText = `${tMap[terrain]} | ${players}`;
+    // Описание местности и состава
+    const terrainNames = {forest: "Лесной массив", urban: "Урбан / Застройка", cqb: "CQB (Помещения)"};
+    document.getElementById('out-meta').innerText = `${terrainNames[terrain]} | Состав: ${players}`;
     
-    // Задача
+    // Боевая задача
     document.getElementById('out-task').innerText = library.tasks[terrain];
 
-    // Правила поражения (выбираем один из двух пресетов для разнообразия)
+    // Заполнение четких правил
     const rulesList = document.getElementById('out-rules');
     rulesList.innerHTML = "";
-    const selectedRules = library.hitRules[Math.floor(Math.random() * library.hitRules.length)];
-    
-    selectedRules.forEach(rule => {
+    library.hitRules.forEach(rule => {
         const li = document.createElement('li');
         li.innerHTML = rule;
         rulesList.appendChild(li);
     });
 
-    document.getElementById('output').style.display = 'block';
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    // Показываем блок с анимацией
+    const output = document.getElementById('output');
+    output.style.display = 'block';
+    
+    // Плавный скролл вниз к результату
+    window.scrollTo({ top: output.offsetTop, behavior: 'smooth' });
 }
 </script>
 
