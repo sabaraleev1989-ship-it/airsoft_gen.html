@@ -1,5 +1,5 @@
 // Название кэша — меняй версию (v2.2, v2.3 и т.д.), когда обновляешь код
-const CACHE_NAME = 'scorpion-gen-v2.2';
+const CACHE_NAME = 'scorpion-gen-v2.5';
 
 // Список файлов для полной работы в оффлайне
 const assets = [
