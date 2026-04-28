@@ -1,33 +1,47 @@
-const CACHE_NAME = 'scorpion-gen-v2';
+// Название кэша — меняй версию (v2.2, v2.3 и т.д.), когда обновляешь код
+const CACHE_NAME = 'scorpion-gen-v2.2';
+
+// Список файлов для полной работы в оффлайне
 const assets = [
   './',
   './index.html',
-  './icon.png'
+  './icon.png',
+  './sw.js'
 ];
 
-// Установка: кешируем файлы
-self.addEventListener('install', event => {
+// 1. Установка: скачиваем файлы в память телефона
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Scorpion.Gen: Файлы кэшированы');
       return cache.addAll(assets);
     })
   );
+  // Активируем Service Worker сразу, не дожидаясь перезагрузки
+  self.skipWaiting();
 });
 
-// Активация: чистим старый кеш
-self.addEventListener('activate', event => {
+// 2. Активация: удаляем старый кэш предыдущих версий
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)));
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      );
     })
   );
+  // Заставляем Service Worker сразу начать контролировать страницу
+  self.clients.claim();
 });
 
-// Стратегия: сначала берем из кеша, если нет — из сети
-self.addEventListener('fetch', event => {
+// 3. Работа с запросами: стратегия "Сначала сеть, если нет связи — кэш"
+// Это лучший вариант для обновляемых сценариев
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      return cachedResponse || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
