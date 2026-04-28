@@ -3,210 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SCORPION.GEN 2.2</title>
+    <title>SCORPION.GEN 2.5</title>
     <link rel="apple-touch-icon" href="icon.png">
     <meta name="theme-color" content="#c5a059">
     <style>
-        :root {
-            --gold: #c5a059;
-            --dark-gold: #8b6d31;
-            --bg: #050505;
-            --red: #a80000;
-            --text: #e5e5e5;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid var(--gold);
-            background: var(--bg);
-            position: relative;
-            min-height: 95vh;
-            padding-bottom: 30px;
-        }
-
-        .version-tag {
-            position: absolute;
-            top: 12px;
-            left: 15px;
-            color: var(--gold);
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 10px 15px;
-            border-bottom: 1px solid var(--gold);
-        }
-
-        h1 {
-            color: var(--gold);
-            text-transform: uppercase;
-            font-size: 18px;
-            letter-spacing: 2px;
-            margin: 0;
-        }
-
-        .settings {
-            padding: 20px;
-            display: grid;
-            gap: 15px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 11px;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        select {
-            background: #1a1a1a;
-            border: 1px solid var(--dark-gold);
-            color: white;
-            padding: 12px;
-            border-radius: 0;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .btn-gen {
-            background: var(--gold);
-            color: black;
-            border: none;
-            padding: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .btn-gen:active { background: white; transform: scale(0.98); }
-
-        #output {
-            display: none;
-            padding: 20px;
-            border-top: 2px solid var(--gold);
-            background: linear-gradient(to bottom, #0a0a0a, #050505);
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; } to { opacity: 1; }
-        }
-
-        .scen-title {
-            color: var(--gold);
-            font-size: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
-
-        .scen-meta {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        h3 {
-            color: var(--gold);
-            font-size: 13px;
-            text-transform: uppercase;
-            margin: 20px 0 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        h3::before {
-            content: "";
-            width: 4px;
-            height: 14px;
-            background: var(--gold);
-            margin-right: 10px;
-        }
-
-        .text-block {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #ccc;
-            background: rgba(255,255,255,0.03);
-            padding: 12px;
-            text-align: justify;
-        }
-
-        .rules-box {
-            border: 1px solid var(--red);
-            background: rgba(168, 0, 0, 0.08);
-            padding: 15px;
-            margin-top: 25px;
-        }
-
-        .rules-box h4 {
-            color: #ff4d4d;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-
-        .rules-list {
-            font-size: 13px;
-            margin: 0;
-            padding-left: 18px;
-            color: #ff9999;
-        }
-
-        .rules-list li { margin-bottom: 8px; }
+        :root { --gold: #c5a059; --dark-gold: #8b6d31; --bg: #050505; --red: #a80000; --text: #e5e5e5; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 500px; border: 1px solid var(--gold); background: var(--bg); position: relative; min-height: 95vh; }
+        .version-tag { position: absolute; top: 12px; left: 15px; color: var(--gold); font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        header { text-align: center; padding: 40px 10px 15px; border-bottom: 1px solid var(--gold); }
+        h1 { color: var(--gold); text-transform: uppercase; font-size: 18px; letter-spacing: 2px; margin: 0; }
+        .settings { padding: 20px; display: grid; gap: 15px; }
+        label { font-size: 11px; color: var(--gold); text-transform: uppercase; font-weight: bold; }
+        select { background: #1a1a1a; border: 1px solid var(--dark-gold); color: white; padding: 12px; font-size: 16px; width: 100%; }
+        .btn-gen { background: var(--gold); color: black; border: none; padding: 16px; font-weight: 900; text-transform: uppercase; cursor: pointer; width: 100%; font-size: 14px; margin-top: 10px; }
+        #output { display: none; padding: 20px; border-top: 2px solid var(--gold); animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .scen-title { color: var(--gold); font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        .scen-meta { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 20px; }
+        h3 { color: var(--gold); font-size: 13px; text-transform: uppercase; margin: 20px 0 8px; display: flex; align-items: center; }
+        h3::before { content: ""; width: 4px; height: 14px; background: var(--gold); margin-right: 10px; }
+        .text-block { font-size: 14px; line-height: 1.6; color: #ccc; background: rgba(255,255,255,0.03); padding: 12px; }
+        .rules-box { border: 1px solid var(--red); background: rgba(168, 0, 0, 0.08); padding: 15px; margin-top: 25px; }
+        .rules-list { font-size: 13px; padding-left: 18px; color: #ff9999; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="version-tag">scorpion.gen 2.2</div>
+    <div class="version-tag">scorpion.gen 2.5</div>
     <header><h1>Сценарии к играм</h1></header>
-
     <div class="settings">
-        <div class="input-group">
-            <label>Тип полигона</label>
-            <select id="terrain">
-                <option value="forest">Чистый лес</option>
-                <option value="mixed" selected>Лес + Здания (Гибрид)</option>
-                <option value="cqb">CQB (Помещения)</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Состав групп</label>
-            <select id="players">
-                <option value="0-10">Малая группа (0 - 10 чел)</option>
-                <option value="10-20">Средняя группа (10 - 20 чел)</option>
-                <option value="20-50" selected>Основной состав (20 - 50 чел)</option>
-                <option value="50+">Большой сбор (50+ чел)</option>
-            </select>
-        </div>
+        <label>Локация</label>
+        <select id="terrain">
+            <option value="forest">Чистый лес</option>
+            <option value="mixed" selected>Лес + Здания (Гибрид)</option>
+            <option value="cqb">CQB (Помещения)</option>
+        </select>
+        <label>Группа</label>
+        <select id="players">
+            <option value="small">Малая (0-10 чел)</option>
+            <option value="mid">Средняя (10-25 чел)</option>
+            <option value="large">Масштаб (25-50+ чел)</option>
+        </select>
         <button class="btn-gen" onclick="generate()">Сформировать приказ</button>
     </div>
 
@@ -218,116 +57,75 @@
         <h3>Боевая задача</h3>
         <div id="out-task" class="text-block"></div>
         <div class="rules-box">
-            <h4 id="rules-style-name">Правила поражения</h4>
-            <ul class="rules-list" id="out-rules"></ul>
+            <h4 id="rules-style-name" style="color: #ff4d4d; margin:0 0 10px 0; text-transform:uppercase; font-size:12px;"></h4>
+            <ul id="out-rules" class="rules-list"></ul>
         </div>
     </div>
 </div>
 
 <script>
-// PWA Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA Error', err));
-  });
-}
-
-const library = {
-    names: ["Черное Жало", "Песчаный Плен", "Тихий Выстрел", "Стальной Панцирь", "Ночной Охотник", "Горный Узел", "Тень Скорпиона", "Разрыв Цепи", "Слепая Зона", "Код 0-0", "Лесной Призрак", "Осада Форта"],
+const data = {
+    names: ["Стальное Жало", "Код Зеро", "Линия Фронта", "Тени Адлера", "Черный Октябрь", "Вектор А", "Тихий Шторм", "Горный Осел", "Красная Зона", "Слепое Пятно"],
     
     lores: [
-        "Разведка ГРУ докладывает: в лесном массиве, прилегающем к заброшенным ангарам, зафиксирована работа мобильной станции РЭБ. Связь подавлена. Вам приказано скрытно выдвинуться в квадрат, подавить охрану в лесу и захватить терминал управления внутри здания. Помните: без связи подкрепление не придет.",
-        "Внимание! В ходе боестолкновения в лесу, противник отступил в укрепленное здание штаба. На подступах к зданию — плотная 'зеленка', где могут скрываться снайперы и растяжки. Команда 'Скорпион' разделяется: первая группа обеспечивает огневое прикрытие из леса, вторая — идет на штурм объекта.",
-        "После авиаудара по базе снабжения, остатки сил противника закрепились в полуразрушенном комплексе среди лесного массива. У них остались портативные комплексы ПВО. Вам нужно провести зачистку леса по периметру, после чего произвести захват и уничтожение ракетных установок внутри строений.",
-        "Критическая ситуация: в лесу обнаружена ДРГ, которая удерживает специалиста в одном из зданий сектора. Противник использует тактику засад на подходах. Группе необходимо прочесать лес, найти 'чистый' коридор и провести молниеносный штурм здания, пока заложника не эвакуировали.",
-        "Важный груз застрял на границе леса и промзоны. Противник контролирует лесные тропы и окна верхних этажей зданий. Ваша задача — взять под контроль лесной периметр, чтобы обеспечить безопасный проход штурмовой группы к главному входу."
+        "По данным радиоперехвата, в квадрате обнаружена точка сбора наемников. Противник готовит прорыв. Ваша задача — сорвать их планы.",
+        "Критический сбой спутниковой связи. В лесу приземлился секретный модуль. Обе стороны выслали группы захвата.",
+        "Террористы захватили ключевой объект инфраструктуры. Переговоры бесполезны. Только силовой сценарий.",
+        "Разведка подтвердила наличие подпольной лаборатории. Объект охраняется 'дикими' отрядами. Нужно провести зачистку.",
+        "Конвой с боеприпасами попал в засаду. Группе 'Скорпион' приказано отбить груз и эвакуировать выживших."
     ],
 
-    tasks: {
-        forest: [
-            "Захватить и удержать 3 контрольные точки в лесу: 'Вышка', 'Овраг' и 'Склад'.",
-            "Поиск 'Черного ящика' сбитого БПЛА. Объект издает сигнал. Доставить на базу.",
-            "Конвой: Группа А должна провести VIP через лес. Группа Б устраивает засады.",
-            "Партизаны: Группа А должна подорвать (коснуться) 3 объекта на базе Группы Б.",
-            "Охота: В лесу скрывается офицер с картой. Взять в плен (касание рукой)."
-        ],
-        mixed: [
-            "Комбинированная атака: Захватить 'Лесной аванпост' (точка в лесу), чтобы получить право на штурм 'Главного здания'.",
-            "Эвакуация из-под огня: Найти в здании раненого пилота и переправить его через лесной массив в точку эвакуации.",
-            "Снайперский заслон: Группа А (снайперы/марксмены) удерживает позиции в лесу, пока Группа Б зачищает здание от 'террористов'.",
-            "Диверсия на ЛЭП: Уничтожить (отключить) генератор в лесу, что 'отключит свет' в здании (оборона в здании 1 минуту сидит с закрытыми глазами).",
-            "Встречный захват: Две команды стартуют из леса с разных сторон. Цель — захватить и удержать здание в центре полигона."
-        ],
-        cqb: [
-            "Спасение заложника: Атака должна вывести VIP за пределы здания за 10 минут.",
-            "Бомба: Одна команда устанавливает таймер. Вторая должна деактивировать его.",
-            "Терминал: Удержание комнаты. Нужно 'скачать данные' (продержаться 5 минут).",
-            "Ближний контакт: Игра только на пистолетах и дробовиках в коридорах.",
-            "Щитовой штурм: Атака имеет щит. Задача — выбить оборону из узкого коридора."
-        ]
+    // База компонентов для 100+ комбинаций
+    parts: {
+        forest: {
+            objs: ["схрон с картами", "сбитый пилот", "мобильная антенна", "замаскированный дот", "командир отряда"],
+            actions: ["найти и уничтожить", "эвакуировать на базу", "удержать 15 минут", "пометить дымом", "захватить в плен"],
+            small: ["Скрытно просочиться через посты.", "Действовать только ножами и пистолетами до контакта.", "Установить 3 растяжки на тропах."],
+            large: ["Организовать сплошную линию обороны.", "Разделить отряд на 3 ударные группы.", "Использовать дымовую завесу при штурме."]
+        },
+        mixed: {
+            objs: ["центр связи в здании", "генератор в лесу", "снайперская лежка", "склад БК", "заложник на 2 этаже"],
+            actions: ["отключить питание в лесу и штурмовать", "блокировать выходы", "выбить противника в зеленку", "удержать периметр"],
+            small: ["Один боец должен незаметно залезть в окно.", "Использовать лес для отхода после диверсии."],
+            large: ["Подавляющий огонь из леса по окнам.", "Одновременный штурм с трех направлений."]
+        },
+        cqb: {
+            objs: ["электронная бомба", "жесткий диск", "ящик с медикаментами", "вип-персона", "арсенал"],
+            actions: ["деактивировать за 5 минут", "вынести из здания", "зачистить каждый угол", "держать круговую оборону"],
+            small: ["Работа парами. Использовать щит.", "Бесшумный вход."],
+            large: ["Закидать здание гранатами перед входом.", "Контролировать все окна снаружи."]
+        }
     },
 
     hitPresets: [
-        {
-            name: "СТИЛЬ: КЛАССИКА (FAST GAME)",
-            rules: [
-                "<b>Любое попадание:</b> Смерть. Включая привод, рюкзак и обувь.",
-                "<b>Рикошет:</b> Не считается (если четко слышно удар о преграду).",
-                "<b>Мертвяк:</b> Выход каждые 10 минут.",
-                "<b>Дружественный огонь:</b> Поражение обоих участников."
-            ]
-        },
-        {
-            name: "СТИЛЬ: ТАКТИКА (MEDIC SYSTEM)",
-            rules: [
-                "<b>Корпус/Голова:</b> Мгновенная смерть.",
-                "<b>Конечность:</b> Ранение. Игрок садится, может отстреливаться из пистолета.",
-                "<b>Медицина:</b> Наложить бинт (10+ витков). Один игрок — одна перевязка.",
-                "<b>Повторное попадание:</b> Добивание. Игрок уходит в мертвяк."
-            ]
-        },
-        {
-            name: "СТИЛЬ: ХАРДКОР (MILSIM)",
-            rules: [
-                "<b>Бронежилет/Шлем:</b> Контузия 2 минуты (упасть, не говорить, не стрелять).",
-                "<b>Попадание в оружие:</b> Привод 'сломан'. Только вторичка.",
-                "<b>Ранения:</b> Только эвакуация на руках/носилках до точки респауна.",
-                "<b>Плен:</b> Голос 'Сдавайся' за спиной (ближе 2м) — игрок в плену."
-            ]
-        }
+        { name: "СТИЛЬ: КЛАССИКА", rules: ["Один шар — один выход.", "Попадание в привод — смерть.", "Рикошет не считается."] },
+        { name: "СТИЛЬ: ТАКТИКА", rules: ["Ранение в конечность — только вторичка.", "Медик лечит бинтом 30 сек.", "Повторное — смерть."] },
+        { name: "СТИЛЬ: ХАРДКОР", rules: ["Попадание в шлем — контузия 1 мин.", "Оружие выбивается навсегда.", "Плен при касании."] }
     ]
 };
 
 function generate() {
     const terrain = document.getElementById('terrain').value;
     const players = document.getElementById('players').value;
-    const output = document.getElementById('output');
     
-    const name = library.names[Math.floor(Math.random() * library.names.length)];
-    const lore = library.lores[Math.floor(Math.random() * library.lores.length)];
-    const taskList = library.tasks[terrain];
-    const task = taskList[Math.floor(Math.random() * taskList.length)];
-    const preset = library.hitPresets[Math.floor(Math.random() * library.hitPresets.length)];
+    const p = data.parts[terrain];
+    const obj = p.objs[Math.floor(Math.random() * p.objs.length)];
+    const act = p.actions[Math.floor(Math.random() * p.actions.length)];
+    const extra = p[players][Math.floor(Math.random() * p[players].length)];
 
-    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + name.toUpperCase();
-    
-    const terrainMap = {forest: "Лесной массив", mixed: "Лес + Здания (Гибрид)", cqb: "CQB (Помещения)"};
-    document.getElementById('out-meta').innerText = `${terrainMap[terrain]} | Состав: ${players}`;
-    
-    document.getElementById('out-lore').innerText = lore;
-    document.getElementById('out-task').innerText = task;
+    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + data.names[Math.floor(Math.random() * data.names.length)];
+    document.getElementById('out-meta').innerText = `Локация: ${terrain} | Группа: ${players}`;
+    document.getElementById('out-lore').innerText = data.lores[Math.floor(Math.random() * data.lores.length)];
+    document.getElementById('out-task').innerText = `Основная цель: ${obj.toUpperCase()}. Вам необходимо ${act}. \n\nТактическая вводная: ${extra}`;
+
+    const preset = data.hitPresets[Math.floor(Math.random() * data.hitPresets.length)];
     document.getElementById('rules-style-name').innerText = preset.name;
-
     const rulesUl = document.getElementById('out-rules');
     rulesUl.innerHTML = "";
-    preset.rules.forEach(r => {
-        const li = document.createElement('li');
-        li.innerHTML = r;
-        rulesUl.appendChild(li);
-    });
+    preset.rules.forEach(r => { rulesUl.innerHTML += `<li>${r}</li>`; });
 
-    output.style.display = 'block';
-    window.scrollTo({ top: output.offsetTop - 20, behavior: 'smooth' });
+    document.getElementById('output').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('output').offsetTop, behavior: 'smooth' });
 }
 </script>
 </body>
