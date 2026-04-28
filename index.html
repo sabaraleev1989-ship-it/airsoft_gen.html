@@ -3,257 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scorpion Tactical Generator</title>
+    <title>SCORPION.GEN 2.0</title>
     <style>
         :root {
-            --scorpion-yellow: #ffae00;
-            --scorpion-dark-yellow: #c28500;
-            --bg-black: #0a0a0a;
-            --card-gray: #151515;
-            --text-white: #e0e0e0;
-            --accent-red: #8b0000;
+            --gold: #c5a059; /* Песочное золото шеврона */
+            --dark-gold: #8b6d31;
+            --bg: #050505;
+            --panel: #111111;
+            --red: #a80000;
+            --text: #e5e5e5;
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace; /* Тактический стиль */
-            background-color: var(--bg-black);
-            color: var(--text-white);
+            font-family: 'Tahoma', 'Geneva', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 15px;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 10px;
         }
 
-        .container {
-            max-width: 900px;
+        /* Общий контейнер */
+        .app-container {
+            max-width: 600px;
             margin: 0 auto;
-            border: 1px solid #333;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--gold);
+            background: var(--bg);
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        /* Маркировка версии */
+        .version-tag {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            opacity: 0.8;
         }
 
         header {
             text-align: center;
-            border-bottom: 3px solid var(--scorpion-yellow);
-            margin-bottom: 30px;
-            padding-bottom: 10px;
+            padding: 30px 10px 10px;
+            border-bottom: 1px solid var(--gold);
         }
 
         h1 {
-            color: var(--scorpion-yellow);
+            color: var(--gold);
             text-transform: uppercase;
-            font-size: 2rem;
-            margin: 0;
-            text-shadow: 0 0 10px rgba(255, 174, 0, 0.5);
+            font-size: 18px;
+            letter-spacing: 3px;
+            margin: 10px 0;
         }
 
-        .badge-icon {
-            font-size: 3rem;
-            margin-bottom: 5px;
-        }
-
-        .settings-grid {
+        /* Настройки */
+        .settings {
+            padding: 20px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
         }
 
         label {
-            color: var(--scorpion-yellow);
-            font-weight: bold;
-            display: block;
+            font-size: 11px;
+            color: var(--gold);
+            text-transform: uppercase;
             margin-bottom: 5px;
-            font-size: 0.9rem;
+            font-weight: bold;
         }
 
         select {
-            width: 100%;
-            padding: 12px;
-            background: #222;
-            border: 1px solid var(--scorpion-dark-yellow);
+            background: #1a1a1a;
+            border: 1px solid var(--dark-gold);
             color: white;
-            border-radius: 0;
-            cursor: pointer;
+            padding: 12px;
+            font-size: 14px;
+            outline: none;
         }
 
-        .generate-btn {
-            grid-column: span 2;
-            background: var(--scorpion-yellow);
+        .btn-gen {
+            background: var(--gold);
             color: black;
             border: none;
-            padding: 18px;
-            font-weight: 900;
-            font-size: 1.3rem;
+            padding: 15px;
+            font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
-            transition: 0.3s;
+            margin-top: 10px;
+            transition: 0.2s;
         }
 
-        .generate-btn:hover {
-            background: white;
-            box-shadow: 0 0 20px var(--scorpion-yellow);
-        }
+        .btn-gen:hover { background: white; }
 
-        #scenario-output {
+        /* Вывод сценария */
+        #output {
             display: none;
-            border: 2px solid var(--scorpion-yellow);
-            padding: 30px;
-            margin-top: 30px;
-            position: relative;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            padding: 20px;
+            border-top: 2px solid var(--gold);
+            animation: fadeIn 0.4s ease-out;
         }
 
-        .scen-title {
-            color: var(--scorpion-yellow);
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #444;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scen-header {
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
             padding-bottom: 10px;
         }
 
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section-label {
-            color: var(--scorpion-yellow);
+        .scen-title {
+            color: var(--gold);
+            font-size: 20px;
             font-weight: bold;
-            text-decoration: underline;
-            margin-bottom: 8px;
-            display: block;
+            text-transform: uppercase;
         }
 
-        .content {
-            font-size: 1.1rem;
-            line-height: 1.5;
+        .scen-meta {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        h3 {
+            color: var(--gold);
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 15px 0 5px;
+            border-left: 3px solid var(--gold);
+            padding-left: 10px;
+        }
+
+        .text-block {
+            font-size: 14px;
+            line-height: 1.6;
             color: #ccc;
-            text-align: justify;
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
         }
 
-        .twist-box {
-            background: rgba(139, 0, 0, 0.1);
-            border: 1px solid var(--accent-red);
+        /* Блок Вводной (Красный) */
+        .rules-box {
+            border: 1px solid var(--red);
+            background: rgba(168, 0, 0, 0.05);
             padding: 15px;
             margin-top: 20px;
         }
 
-        .twist-box b { color: var(--accent-red); }
-
-        @media (max-width: 600px) {
-            .settings-grid { grid-template-columns: 1fr; }
-            .generate-btn { grid-column: span 1; }
+        .rules-box h4 {
+            color: var(--red);
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            font-size: 13px;
         }
+
+        .rules-list {
+            font-size: 13px;
+            margin: 0;
+            padding-left: 15px;
+            color: #ff9999;
+        }
+
+        .rules-list li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
+    <div class="version-tag">SCORPION.GEN 2.0</div>
+    
     <header>
-        <div class="badge-icon">🦂</div>
-        <h1>Scorpion Scenario Gen</h1>
+        <h1>Сценарии к играм</h1>
     </header>
 
-    <div class="settings-grid">
-        <div>
-            <label>ТЕРРИТОРИЯ</label>
+    <div class="settings">
+        <div class="input-group">
+            <label>Тип полигона</label>
             <select id="terrain">
-                <option value="forest">ЛЕСНОЙ МАССИВ</option>
-                <option value="urban">УРБАН / ЗАСТРОЙКА</option>
-                <option value="cqb">CQB (ПОМЕЩЕНИЯ)</option>
+                <option value="forest">Лесной массив</option>
+                <option value="urban">Урбан / Здания</option>
+                <option value="cqb">CQB (Тесные помещения)</option>
             </select>
         </div>
-        <div>
-            <label>ИНТЕНСИВНОСТЬ</label>
-            <select id="intensity">
-                <option value="low">РАЗВЕДКА (НИЗКАЯ)</option>
-                <option value="med" selected>КОНТАКТ (СРЕДНЯЯ)</option>
-                <option value="high">МЯСОРУБКА (ВЫСОКАЯ)</option>
+
+        <div class="input-group">
+            <label>Состав групп</label>
+            <select id="players">
+                <option value="10-20">Малые группы (10-20 чел)</option>
+                <option value="20-50" selected>Средний состав (20-50 чел)</option>
+                <option value="50+">Большой сбор (50+ чел)</option>
             </select>
         </div>
-        <button class="generate-btn" onclick="generate()">Сформировать приказ</button>
+
+        <button class="btn-gen" onclick="generate()">Сформировать приказ</button>
     </div>
 
-    <div id="scenario-output">
-        <div class="scen-title" id="out-title">КОДОВОЕ НАЗВАНИЕ</div>
-        
-        <div class="section">
-            <span class="section-label">ОПЕРАТИВНАЯ СВОДКА (ЛЕГЕНДА):</span>
-            <div class="content" id="out-lore"></div>
+    <div id="output">
+        <div class="scen-header">
+            <div id="out-name" class="scen-title">ОПЕРАЦИЯ: НЕИЗВЕСТНО</div>
+            <div id="out-meta" class="scen-meta">Лес | 20-50 чел</div>
         </div>
 
-        <div class="section">
-            <span class="section-label">БОЕВАЯ ЗАДАЧА:</span>
-            <div class="content" id="out-task"></div>
-        </div>
+        <h3>Оперативная легенда</h3>
+        <div id="out-lore" class="text-block"></div>
 
-        <div class="twist-box">
-            <b>ВВОДНАЯ "СКОРПИОН":</b> <span id="out-twist"></span>
+        <h3>Боевая задача</h3>
+        <div id="out-task" class="text-block"></div>
+
+        <div class="rules-box">
+            <h4>Вводная "СКОРПИОН" (Правила поражения):</h4>
+            <ul class="rules-list" id="out-rules">
+                </ul>
         </div>
     </div>
 </div>
 
 <script>
-const data = {
-    titles: ["Острый хвост", "Песчаная буря", "Яд тишины", "Черная метка", "Жало", "Стальной панцирь", "Ночной охотник", "Смертельный укус", "Клешни", "Пустынный призрак"],
+const library = {
+    names: ["Черный песок", "Укус кобры", "Спящий скорпион", "Стальное жало", "Гром в горах", "Тень Адлера"],
     
     lores: [
-        "Разведка докладывает: в данном квадрате зафиксирована активность наемников. По нашим данным, они удерживают зашифрованный кейс с кодами доступа к спутниковой сети. Если информация утечет — весь регион окажется под угрозой. Ваша группа выдвигается в качестве передового отряда для перехвата инициативы. Сопротивление ожидается организованное и агрессивное.",
-        "После крушения транспортного вертолета в зоне ответственности нашего подразделения, пропал важный сотрудник корпорации 'Aegis'. Поисковые маяки молчат. Местные радикальные группировки уже начали прочесывать местность. Ваша задача — опередить противника и обеспечить безопасный коридор для эвакуации, пока кольцо окружения не замкнулось.",
-        "Старый промышленный сектор стал камнем преткновения между двумя ЧВК. Объект имеет стратегическое значение из-за системы подземных коммуникаций. Командование отдало приказ: занять ключевые узлы связи и удерживать их любой ценой. Будьте готовы к тому, что противник задействует тяжелые штурмовые щиты и дымовые завесы.",
-        "Внимание, группы! В секторе обнаружен схрон с химоружием, оставленный при отступлении регулярных войск. Группа 'Север' должна произвести дезактивацию, группа 'Юг' получила приказ не допустить этого, так как имеет свои планы на данные ресурсы. Погода ухудшается, связь будет нестабильной.",
-        "Мирная демонстрация в пригороде переросла в вооруженный конфликт. Под прикрытием хаоса, диверсионная группа противника закрепилась в ключевых зданиях. Нам нужно выбить их оттуда до прихода основных сил. Спецсредства разрешены, огонь на подавление — по готовности."
+        "Внимание! Разведка перехватила данные о секретной поставке медикаментов и боеприпасов для повстанцев. Груз замаскирован под гражданские ящики и находится в транзитной зоне. Ваша задача — взять зону под контроль до прибытия основных сил противника. В случае обнаружения превосходящих сил — перейти к глухой обороне периметра. Ошибка недопустима, на кону снабжение всего южного фронта.",
+        "Критическая ситуация: в заброшенном секторе связи произошел сбой системы оповещения. По нашим данным, диверсионная группа уже закрепилась на узловых точках и готовит подрыв ретранслятора. Если связь будет потеряна, мы не сможем координировать авиацию. Группа 'Скорпион' выдвигается для немедленной зачистки и восстановления контроля над терминалами связи.",
+        "Чрезвычайное происшествие. В ходе патрулирования был сбит союзный дрон-разведчик. На его борту — жесткий диск с координатами наших складов. Координаты падения известны приблизительно. Противник уже выслал поисковые отряды. Вам необходимо прочесать квадрат, найти обломки и уничтожить носитель информации, либо доставить его в точку эвакуации."
     ],
 
     tasks: {
-        forest: [
-            "Установить контроль над тремя точками: 'Вышка', 'Родник' и 'Овраг'. Удержание каждой точки дает очки каждые 5 минут.",
-            "Найти в лесу разбитый ящик с боеприпасами, эвакуировать его на свою базу. Ящик тяжелый, нести можно только вдвоем.",
-            "Провести VIP-персону через лесную тропу к точке эвакуации. Вторая команда устраивает засады по всему маршруту."
-        ],
-        urban: [
-            "Захватить центральное здание и вывесить флаг на крыше. Удерживать флаг до конца раунда.",
-            "Обеим командам необходимо собрать 10 разбросанных по полигону 'энергоблоков'. Чья команда принесет больше в свой штаб — та победила.",
-            "Штурм укрепленного штаба. У обороны одна жизнь, у атаки — бесконечный респаун, но ограниченное время (15 минут)."
-        ],
-        cqb: [
-            "Разминирование: Атака должна найти и отключить таймер. Оборона знает расположение, но не может подходить к нему ближе 3 метров.",
-            "Встречный бой за центральный холл. Каждые 2 минуты в игру вступает 'джаггернаут' со щитом на стороне проигрывающей команды.",
-            "Зачистка всех комнат этажа. Каждая комната считается захваченной, если внутри не осталось противника и оставлен маркер."
-        ]
+        forest: "Захват и удержание 3-х контрольных точек в течение 30 минут. Команда А стартует с северного респауна, Команда Б — с южного. Дозарядка разрешена только на контрольных точках.",
+        urban: "Поиск и эвакуация 'Ценного сотрудника' (игрок в ярком жилете). Атака должна вывести его за периметр зданий, Оборона — удерживать в подвале. Время на операцию: 40 минут.",
+        cqb: "Встречный бой за центральный терминал. Задача: занести в комнату терминала свой кейс и удерживать его 10 минут. В случае выноса кейса противником таймер сбрасывается."
     },
 
-    twists: [
-        "Ранение в руку — нельзя использовать привод (только пистолет). Ранение в ногу — только ползком или с помощью товарища.",
-        "Радиомолчание: использование раций запрещено. Только жесты и голосовые команды.",
-        "Последний шанс: если вас убили, вы можете остаться на месте как 'раненый' еще на 5 минут и передавать информацию голосом.",
-        "Ограниченный БК: использовать можно только один магазин (механу), дозарядка запрещена до захвата точки снабжения.",
-        "Предатель: в каждой команде есть один игрок, который по сигналу ракетницы переходит на сторону врага.",
-        "Дымовая завеса: каждые 10 минут организаторы (или мертвые) активируют дымы в случайных точках."
+    // ЧЕТКИЕ ПРАВИЛА ПОРАЖЕНИЯ
+    hitRules: [
+        [
+            "<b>Попадание в корпус:</b> Мгновенная смерть. Игрок поднимает красную тряпку и уходит в мертвяк.",
+            "<b>Попадание в конечность:</b> Ранение. Игрок обязан упасть, громко крикнуть 'Ранен!' и может только отстреливаться из пистолета (при ранении в руку) или только ползти (при ранении в ногу).",
+            "<b>Повторное попадание в раненого:</b> Смерть. Игрок уходит в мертвяк.",
+            "<b>Лечение:</b> Другой игрок может перебинтовать раненого (30 секунд контакта). После бинтования игрок полностью в строю."
+        ],
+        [
+            "<b>Попадание в любую часть тела:</b> Игрок считается раненым. Должен сесть на месте, не может стрелять и говорить. Ждет медика 3 минуты.",
+            "<b>Если медик не успел:</b> Игрок считается 'истекшим кровью' и уходит в мертвяк.",
+            "<b>Попадание в привод:</b> Оружие выведено из строя до конца жизни. Игрок может использовать только вторичку или нож."
+        ]
     ]
 };
 
 function generate() {
     const terrain = document.getElementById('terrain').value;
-    const output = document.getElementById('scenario-output');
+    const players = document.getElementById('players').value;
     
-    // Генерируем случайный набор
-    const title = data.titles[Math.floor(Math.random() * data.titles.length)];
-    const lore = data.lores[Math.floor(Math.random() * data.lores.length)];
-    const taskList = data.tasks[terrain];
-    const task = taskList[Math.floor(Math.random() * taskList.length)];
-    const twist = data.twists[Math.floor(Math.random() * data.twists.length)];
+    // Название и легенда
+    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + library.names[Math.floor(Math.random() * library.names.length)];
+    document.getElementById('out-lore').innerText = library.lores[Math.floor(Math.random() * library.lores.length)];
+    
+    // Мета (Тип и кол-во человек)
+    const tMap = {forest: "Лес", urban: "Урбан", cqb: "CQB"};
+    document.getElementById('out-meta').innerText = `${tMap[terrain]} | ${players}`;
+    
+    // Задача
+    document.getElementById('out-task').innerText = library.tasks[terrain];
 
-    // Вывод
-    document.getElementById('out-title').innerText = "ОПЕРАЦИЯ: " + title.toUpperCase();
-    document.getElementById('out-lore').innerText = lore;
-    document.getElementById('out-task').innerText = task;
-    document.getElementById('out-twist').innerText = twist;
+    // Правила поражения (выбираем один из двух пресетов для разнообразия)
+    const rulesList = document.getElementById('out-rules');
+    rulesList.innerHTML = "";
+    const selectedRules = library.hitRules[Math.floor(Math.random() * library.hitRules.length)];
+    
+    selectedRules.forEach(rule => {
+        const li = document.createElement('li');
+        li.innerHTML = rule;
+        rulesList.appendChild(li);
+    });
 
-    // Показываем результат
-    output.style.display = 'block';
-    window.scrollTo({ top: output.offsetTop, behavior: 'smooth' });
+    document.getElementById('output').style.display = 'block';
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 </script>
+
 </body>
 </html>
