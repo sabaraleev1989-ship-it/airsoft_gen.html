@@ -2,12 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCORPION.GEN 2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SCORPION.GEN 2.2</title>
     <link rel="apple-touch-icon" href="icon.png">
-    
     <meta name="theme-color" content="#c5a059">
-    
     <style>
         :root {
             --gold: #c5a059;
@@ -33,6 +31,8 @@
             border: 1px solid var(--gold);
             background: var(--bg);
             position: relative;
+            min-height: 95vh;
+            padding-bottom: 30px;
         }
 
         .version-tag {
@@ -85,7 +85,8 @@
             color: white;
             padding: 12px;
             border-radius: 0;
-            font-size: 16px; /* Чтобы iOS не зумил при клике */
+            font-size: 16px;
+            outline: none;
         }
 
         .btn-gen {
@@ -97,12 +98,22 @@
             text-transform: uppercase;
             cursor: pointer;
             margin-top: 10px;
+            font-size: 14px;
+            transition: 0.2s;
         }
+
+        .btn-gen:active { background: white; transform: scale(0.98); }
 
         #output {
             display: none;
             padding: 20px;
             border-top: 2px solid var(--gold);
+            background: linear-gradient(to bottom, #0a0a0a, #050505);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
         }
 
         .scen-title {
@@ -110,13 +121,16 @@
             font-size: 20px;
             font-weight: bold;
             text-transform: uppercase;
+            line-height: 1.2;
         }
 
         .scen-meta {
-            font-size: 12px;
+            font-size: 11px;
             color: #888;
+            margin-top: 5px;
             margin-bottom: 20px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         h3 {
@@ -156,7 +170,7 @@
             color: #ff4d4d;
             margin: 0 0 10px 0;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .rules-list {
@@ -166,30 +180,31 @@
             color: #ff9999;
         }
 
-        .rules-list li { margin-bottom: 10px; }
+        .rules-list li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="version-tag">scorpion.gen 2.0</div>
+    <div class="version-tag">scorpion.gen 2.2</div>
     <header><h1>Сценарии к играм</h1></header>
 
     <div class="settings">
         <div class="input-group">
             <label>Тип полигона</label>
             <select id="terrain">
-                <option value="forest">Лесной массив</option>
-                <option value="urban">Урбан / Застройка</option>
+                <option value="forest">Чистый лес</option>
+                <option value="mixed" selected>Лес + Здания (Гибрид)</option>
                 <option value="cqb">CQB (Помещения)</option>
             </select>
         </div>
         <div class="input-group">
             <label>Состав групп</label>
             <select id="players">
-                <option value="10-20">10 - 20 человек</option>
-                <option value="20-50" selected>20 - 50 человек</option>
-                <option value="50+">50+ человек</option>
+                <option value="0-10">Малая группа (0 - 10 чел)</option>
+                <option value="10-20">Средняя группа (10 - 20 чел)</option>
+                <option value="20-50" selected>Основной состав (20 - 50 чел)</option>
+                <option value="50+">Большой сбор (50+ чел)</option>
             </select>
         </div>
         <button class="btn-gen" onclick="generate()">Сформировать приказ</button>
@@ -210,54 +225,74 @@
 </div>
 
 <script>
-// РЕГИСТРАЦИЯ SERVICE WORKER ДЛЯ ОФФЛАЙН РАБОТЫ
+// PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-      console.log('Scorpion.Gen: Оффлайн режим активирован', reg);
-    }).catch(err => {
-      console.log('Ошибка PWA:', err);
-    });
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log('PWA Error', err));
   });
 }
 
 const library = {
-    names: ["Черное Жало", "Песчаный Плен", "Тихий Выстрел", "Стальной Панцирь", "Ночной Охотник", "Горный Узел"],
+    names: ["Черное Жало", "Песчаный Плен", "Тихий Выстрел", "Стальной Панцирь", "Ночной Охотник", "Горный Узел", "Тень Скорпиона", "Разрыв Цепи", "Слепая Зона", "Код 0-0", "Лесной Призрак", "Осада Форта"],
+    
     lores: [
-        "Разведка докладывает о секретной поставке медикаментов. Груз находится в транзитной зоне. Нужно взять зону под контроль.",
-        "Транспортный вертолет совершил аварийную посадку. Территория падения кишит патрулями. Найдите бортовой самописец.",
-        "Старый складской комплекс стал точкой интереса двух ЧВК. Объект содержит запасы горючего. Закрепитесь на объекте."
+        "Разведка ГРУ докладывает: в лесном массиве, прилегающем к заброшенным ангарам, зафиксирована работа мобильной станции РЭБ. Связь подавлена. Вам приказано скрытно выдвинуться в квадрат, подавить охрану в лесу и захватить терминал управления внутри здания. Помните: без связи подкрепление не придет.",
+        "Внимание! В ходе боестолкновения в лесу, противник отступил в укрепленное здание штаба. На подступах к зданию — плотная 'зеленка', где могут скрываться снайперы и растяжки. Команда 'Скорпион' разделяется: первая группа обеспечивает огневое прикрытие из леса, вторая — идет на штурм объекта.",
+        "После авиаудара по базе снабжения, остатки сил противника закрепились в полуразрушенном комплексе среди лесного массива. У них остались портативные комплексы ПВО. Вам нужно провести зачистку леса по периметру, после чего произвести захват и уничтожение ракетных установок внутри строений.",
+        "Критическая ситуация: в лесу обнаружена ДРГ, которая удерживает специалиста в одном из зданий сектора. Противник использует тактику засад на подходах. Группе необходимо прочесать лес, найти 'чистый' коридор и провести молниеносный штурм здания, пока заложника не эвакуировали.",
+        "Важный груз застрял на границе леса и промзоны. Противник контролирует лесные тропы и окна верхних этажей зданий. Ваша задача — взять под контроль лесной периметр, чтобы обеспечить безопасный проход штурмовой группы к главному входу."
     ],
+
     tasks: {
-        forest: "Захват и удержание 3-х флагов в лесу. Доставка на базу дает очки.",
-        urban: "Штурм здания. Атака вешает флаг на крыше, Оборона держит 30 минут.",
-        cqb: "Найти в одной из комнат электронную бомбу и деактивировать её."
+        forest: [
+            "Захватить и удержать 3 контрольные точки в лесу: 'Вышка', 'Овраг' и 'Склад'.",
+            "Поиск 'Черного ящика' сбитого БПЛА. Объект издает сигнал. Доставить на базу.",
+            "Конвой: Группа А должна провести VIP через лес. Группа Б устраивает засады.",
+            "Партизаны: Группа А должна подорвать (коснуться) 3 объекта на базе Группы Б.",
+            "Охота: В лесу скрывается офицер с картой. Взять в плен (касание рукой)."
+        ],
+        mixed: [
+            "Комбинированная атака: Захватить 'Лесной аванпост' (точка в лесу), чтобы получить право на штурм 'Главного здания'.",
+            "Эвакуация из-под огня: Найти в здании раненого пилота и переправить его через лесной массив в точку эвакуации.",
+            "Снайперский заслон: Группа А (снайперы/марксмены) удерживает позиции в лесу, пока Группа Б зачищает здание от 'террористов'.",
+            "Диверсия на ЛЭП: Уничтожить (отключить) генератор в лесу, что 'отключит свет' в здании (оборона в здании 1 минуту сидит с закрытыми глазами).",
+            "Встречный захват: Две команды стартуют из леса с разных сторон. Цель — захватить и удержать здание в центре полигона."
+        ],
+        cqb: [
+            "Спасение заложника: Атака должна вывести VIP за пределы здания за 10 минут.",
+            "Бомба: Одна команда устанавливает таймер. Вторая должна деактивировать его.",
+            "Терминал: Удержание комнаты. Нужно 'скачать данные' (продержаться 5 минут).",
+            "Ближний контакт: Игра только на пистолетах и дробовиках в коридорах.",
+            "Щитовой штурм: Атака имеет щит. Задача — выбить оборону из узкого коридора."
+        ]
     },
+
     hitPresets: [
         {
             name: "СТИЛЬ: КЛАССИКА (FAST GAME)",
             rules: [
-                "<b>Любое попадание:</b> Смерть. Включая снаряжение и рюкзак.",
-                "<b>Рикошет:</b> Не считается.",
-                "<b>Мертвяк:</b> Выход каждые 10 минут."
+                "<b>Любое попадание:</b> Смерть. Включая привод, рюкзак и обувь.",
+                "<b>Рикошет:</b> Не считается (если четко слышно удар о преграду).",
+                "<b>Мертвяк:</b> Выход каждые 10 минут.",
+                "<b>Дружественный огонь:</b> Поражение обоих участников."
             ]
         },
         {
             name: "СТИЛЬ: ТАКТИКА (MEDIC SYSTEM)",
             rules: [
-                "<b>Корпус:</b> Смерть.",
-                "<b>Конечность:</b> Ранение. Огонь только из вторички.",
-                "<b>Медицина:</b> Перебинтовать раненого можно за 30 секунд.",
-                "<b>Повторное:</b> Смерть."
+                "<b>Корпус/Голова:</b> Мгновенная смерть.",
+                "<b>Конечность:</b> Ранение. Игрок садится, может отстреливаться из пистолета.",
+                "<b>Медицина:</b> Наложить бинт (10+ витков). Один игрок — одна перевязка.",
+                "<b>Повторное попадание:</b> Добивание. Игрок уходит в мертвяк."
             ]
         },
         {
             name: "СТИЛЬ: ХАРДКОР (MILSIM)",
             rules: [
-                "<b>Шлем/Броник:</b> Контузия 1 минута.",
-                "<b>Оружие:</b> Привод сломан. Только вторичка.",
-                "<b>Ранения:</b> Только эвакуация товарищем.",
-                "<b>Плен:</b> Касание рукой по плечу со спины."
+                "<b>Бронежилет/Шлем:</b> Контузия 2 минуты (упасть, не говорить, не стрелять).",
+                "<b>Попадание в оружие:</b> Привод 'сломан'. Только вторичка.",
+                "<b>Ранения:</b> Только эвакуация на руках/носилках до точки респауна.",
+                "<b>Плен:</b> Голос 'Сдавайся' за спиной (ближе 2м) — игрок в плену."
             ]
         }
     ]
@@ -266,27 +301,33 @@ const library = {
 function generate() {
     const terrain = document.getElementById('terrain').value;
     const players = document.getElementById('players').value;
+    const output = document.getElementById('output');
     
-    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + library.names[Math.floor(Math.random() * library.names.length)];
-    document.getElementById('out-lore').innerText = library.lores[Math.floor(Math.random() * library.lores.length)];
-    
-    const terrainNames = {forest: "Лесной массив", urban: "Урбан", cqb: "CQB"};
-    document.getElementById('out-meta').innerText = `${terrainNames[terrain]} | Состав: ${players}`;
-    document.getElementById('out-task').innerText = library.tasks[terrain];
+    const name = library.names[Math.floor(Math.random() * library.names.length)];
+    const lore = library.lores[Math.floor(Math.random() * library.lores.length)];
+    const taskList = library.tasks[terrain];
+    const task = taskList[Math.floor(Math.random() * taskList.length)];
+    const preset = library.hitPresets[Math.floor(Math.random() * library.hitPresets.length)];
 
-    const randomPreset = library.hitPresets[Math.floor(Math.random() * library.hitPresets.length)];
-    document.getElementById('rules-style-name').innerText = randomPreset.name;
+    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + name.toUpperCase();
     
-    const rulesList = document.getElementById('out-rules');
-    rulesList.innerHTML = "";
-    randomPreset.rules.forEach(rule => {
+    const terrainMap = {forest: "Лесной массив", mixed: "Лес + Здания (Гибрид)", cqb: "CQB (Помещения)"};
+    document.getElementById('out-meta').innerText = `${terrainMap[terrain]} | Состав: ${players}`;
+    
+    document.getElementById('out-lore').innerText = lore;
+    document.getElementById('out-task').innerText = task;
+    document.getElementById('rules-style-name').innerText = preset.name;
+
+    const rulesUl = document.getElementById('out-rules');
+    rulesUl.innerHTML = "";
+    preset.rules.forEach(r => {
         const li = document.createElement('li');
-        li.innerHTML = rule;
-        rulesList.appendChild(li);
+        li.innerHTML = r;
+        rulesUl.appendChild(li);
     });
 
-    document.getElementById('output').style.display = 'block';
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    output.style.display = 'block';
+    window.scrollTo({ top: output.offsetTop - 20, behavior: 'smooth' });
 }
 </script>
 </body>
