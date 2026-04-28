@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SCORPION.GEN 3.0</title>
+    <title>SCORPION.GEN 3.5</title>
     <link rel="apple-touch-icon" href="icon.png">
     <meta name="theme-color" content="#c5a059">
     <style>
@@ -17,20 +17,23 @@
         label { font-size: 11px; color: var(--gold); text-transform: uppercase; font-weight: bold; }
         select { background: #1a1a1a; border: 1px solid var(--dark-gold); color: white; padding: 12px; font-size: 16px; width: 100%; border-radius: 0; -webkit-appearance: none; }
         .btn-gen { background: var(--gold); color: black; border: none; padding: 16px; font-weight: 900; text-transform: uppercase; cursor: pointer; width: 100%; font-size: 14px; margin-top: 10px; }
-        .btn-gen:active { background: #fff; }
         #output { display: none; padding: 20px; border-top: 2px solid var(--gold); animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .scen-title { color: var(--gold); font-size: 20px; font-weight: bold; text-transform: uppercase; }
-        .text-block { font-size: 14px; line-height: 1.6; color: #ccc; background: rgba(255,255,255,0.03); padding: 12px; text-align: justify; white-space: pre-line; margin-top: 10px; }
-        .counter { font-size: 10px; color: var(--dark-gold); text-align: right; margin-top: 5px; text-transform: uppercase; }
-        .rules-box { border: 1px solid var(--red); background: rgba(168, 0, 0, 0.08); padding: 15px; margin-top: 25px; }
+        .scen-title { color: var(--gold); font-size: 20px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        h3 { color: var(--gold); font-size: 13px; text-transform: uppercase; margin: 20px 0 8px; display: flex; align-items: center; border-left: 3px solid var(--gold); padding-left: 10px; }
+        .text-block { font-size: 14px; line-height: 1.5; color: #ccc; background: rgba(255,255,255,0.03); padding: 12px; margin-bottom: 10px; }
+        .team-box { margin-bottom: 15px; border-left: 2px solid #555; padding-left: 10px; }
+        .team-a { border-color: #4d94ff; } .team-b { border-color: #ff4d4d; }
+        .team-name { font-weight: bold; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
+        .team-a .team-name { color: #4d94ff; } .team-b .team-name { color: #ff4d4d; }
+        .rules-box { border: 1px solid var(--red); background: rgba(168, 0, 0, 0.08); padding: 15px; margin-top: 20px; }
         .rules-list { font-size: 13px; padding-left: 18px; color: #ff9999; margin: 0; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="version-tag">scorpion.gen 3.0 | ANTI-REPEAT</div>
+    <div class="version-tag">scorpion.gen 3.5 | VS MODE</div>
     <header><h1>Сценарии к играм</h1></header>
     <div class="settings">
         <label>Локация</label>
@@ -46,13 +49,25 @@
             <option value="large">Масштаб (25-50+ чел)</option>
         </select>
         <button class="btn-gen" onclick="generate()">Сформировать приказ</button>
-        <div id="queue-status" class="counter"></div>
     </div>
 
     <div id="output">
         <div id="out-name" class="scen-title"></div>
-        <div id="out-meta" style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 15px;"></div>
-        <div id="out-task" class="text-block"></div>
+        <div id="out-meta" style="font-size: 10px; color: #777; text-transform: uppercase; margin-bottom: 15px;"></div>
+        
+        <h3>Брифинг / Легенда</h3>
+        <div id="out-lore" class="text-block"></div>
+        
+        <h3>Задачи сторон</h3>
+        <div class="team-box team-a">
+            <div class="team-name">ГРУППА А (Атака / Желтые)</div>
+            <div id="out-task-a" class="text-block" style="background: none; padding: 0;"></div>
+        </div>
+        <div class="team-box team-b">
+            <div class="team-name">ГРУППА Б (Оборона / Синие)</div>
+            <div id="out-task-b" class="text-block" style="background: none; padding: 0;"></div>
+        </div>
+
         <div class="rules-box">
             <h4 id="rules-style-name" style="color: #ff4d4d; margin:0 0 10px 0; text-transform:uppercase; font-size:12px;"></h4>
             <ul id="out-rules" class="rules-list"></ul>
@@ -61,89 +76,99 @@
 </div>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); });
-}
-
-// ГРОМАДНАЯ БАЗА КОМПОНЕНТОВ (БОЛЕЕ 100 ВАРИАНТОВ НА СТЫКЕ)
 const database = {
     forest: {
-        objs: ["ретранслятор связи", "сбитый спутник", "забытый ящик БК", "командир наемников", "точка эвакуации", "склад провизии", "заминированный мост", "раненый разведчик", "черный ящик", "древний дот"],
-        actions: ["установить контроль и вызвать штаб", "найти и доставить в точку 'Зеро'", "уничтожить зарядом ВВ", "взять живым для допроса", "организовать круговую оборону", "пометить ИК-маяком", "разминировать и занять позицию"],
-        tactics: {
-            small: ["Скрытное перемещение без использования радио.", "Установка ловушек на путях отхода.", "Один выстрел — одна позиция."],
-            mid: ["Разделение на 'Загонщиков' и 'Молот'.", "Организация засады полукругом.", "Подавление фланга."],
-            large: ["Фронтальное наступление с дымовой завесой.", "Удержание линии фронта 200 метров.", "Работа тремя волнами штурма."]
-        }
+        lores: [
+            "Разведка обнаружила в лесу зашифрованный маяк. Его сигнал может выдать позиции штаба.",
+            "В квадрате приземлился контейнер с гуманитарной помощью для окруженных сил.",
+            "Группа диверсантов планирует взорвать мост через лесную реку, чтобы отрезать снабжение.",
+            "Сбитый пилот скрывается в густой зеленке. Он несет важные коды шифрования.",
+            "Противник обустроил в лесу мобильный госпиталь. Нужно захватить медикаменты."
+        ],
+        missions: [
+            { a: "Найти маяк и удерживать его 10 минут для деактивации.", b: "Защищать маяк. Не дать противнику подойти ближе чем на 5 метров." },
+            { a: "Эвакуировать пилота из центра леса на свою базу.", b: "Обнаружить пилота раньше и захватить его в плен." },
+            { a: "Установить учебный заряд под 'мост' (дерево/ориентир).", b: "Патрулировать лесные тропы и сорвать попытку подрыва." }
+        ]
     },
     mixed: {
-        objs: ["подпольный сервер", "хим-лаборатория", "арсенал в подвале", "снайпер в лесу", "система ПВО", "генератор энергии", "VIP в здании", "карта минных полей", "грузовик снабжения", "рация охраны"],
-        actions: ["отключить питание и штурмовать объект", "провести эвакуацию через лес", "зачистить здание и лес вокруг", "удержать крышу и вход", "совершить диверсию и уйти в зеленку"],
-        tactics: {
-            small: ["Вход через окно при поддержке из кустов.", "Бесшумная ликвидация охраны периметра.", "Использование леса как ложной цели."],
-            mid: ["Группа А блокирует выходы, Б зачищает здание.", "Минирование подступов к объекту.", "Перекрестный огонь здание-лес."],
-            large: ["Снайперское подавление всех окон из леса.", "Полное кольцо окружения.", "Штурм с использованием щитов и подрывом дверей."]
-        }
+        lores: [
+            "Старый завод стал базой для переброски контрабандного оружия. Пора закрыть эту лавочку.",
+            "Генератор здания в лесу — единственная точка питания для системы ПВО региона.",
+            "В заброшенном комплексе удерживают информатора. Путь к нему лежит через плотный лес.",
+            "Террористы готовят запуск ракеты из ангара. Лесной периметр заминирован.",
+            "Колонна снабжения застряла между лесом и промзоной. Идет бой за груз."
+        ],
+        missions: [
+            { a: "Отключить генератор в лесу, затем штурмовать здание и вынести сейф.", b: "Распределить силы: охрана генератора и оборона комнат в здании." },
+            { a: "Пробиться через лес к центральному входу и захватить 2 этаж.", b: "Использовать лес для засад, чтобы не дать противнику дойти до здания." },
+            { a: "Спасти заложника из здания и довести его живым до точки в лесу.", b: "Удерживать заложника внутри. В случае штурма — менять комнату." }
+        ]
     },
     cqb: {
-        objs: ["сейф с кодами", "заложник в путах", "активированная бомба", "наркобарон", "пульт охраны", "связка ключей", "документы на столе", "флешка в ПК", "оружейная стойка", "ящик с вирусом"],
-        actions: ["взломать и удерживать до скачивания", "спасти без потерь среди своих", "деактивировать за 7 минут", "вывести через черный ход", "полная зачистка всех секторов"],
-        tactics: {
-            small: ["Работа двойками, спина к спине.", "Использование щита 'Скала'.", "Вход только на гранатах."],
-            mid: ["Оцепление этажа. Зачистка углов.", "Работа через проломы в стенах.", "Использование зеркала для разведки."],
-            large: ["Штурм со всех входов одновременно.", "Постоянное световое подавление фонарями.", "Контроль лестниц и лифтов."]
-        }
+        lores: [
+            "Здание полностью заминировано. Таймер уже запущен.",
+            "Внутри офисного центра скрывается высокопоставленный перебежчик.",
+            "Ночная облава на притон торговцев данными. Работа в узких коридорах.",
+            "Захват серверной станции. Нужно предотвратить удаление файлов.",
+            "Противник закрепился в бункере. Прямой штурм — единственный выход."
+        ],
+        missions: [
+            { a: "Зачистить все помещения здания. Найти и вынести черный ящик.", b: "Организовать глухую оборону. Использовать щиты и баррикады." },
+            { a: "Заложить бомбу в центре здания и защищать её 5 минут.", b: "Не допустить закладки. Если заложена — деактивировать (1 минута)." },
+            { a: "Взять в плен лидера обороны (касание рукой).", b: "Защищать командира. В случае опасности — эвакуировать на крышу." }
+        ]
     }
 };
 
-const hitPresets = [
-    { name: "КЛАССИКА", rules: ["Любой хит — смерть.", "Привод — смерть.", "Рикошет не считается."] },
-    { name: "ТАКТИКА", rules: ["Конечность — ранение (нужен бинт).", "Голова/Корпус — смерть.", "Медик лечит 20 сек."] },
-    { name: "ХАРДКОР", rules: ["Контузия от взрыва 1 мин.", "Попадание в привод — только вторичка.", "Плен при угрозе в спину."] }
-];
+const tactics = {
+    small: ["Работа в двойках.", "Скрытность приоритетнее огня.", "Использование ножей/пистолетов."],
+    mid: ["Одна подгруппа отвлекает, вторая заходит с фланга.", "Контроль радиоэфира.", "Дымовая завеса."],
+    large: ["Массированный штурм всеми силами.", "Подавление огнем из всех стволов.", "Работа тремя эшелонами."]
+};
 
-// ЛОГИКА АНТИ-ПОВТОРА (QUEUE MANAGEMENT)
-function getQueueKey(terrain, players) { return `queue_${terrain}_${players}`; }
+function getQueueKey(terrain, players) { return `v35_queue_${terrain}_${players}`; }
 
 function generate() {
     const terrain = document.getElementById('terrain').value;
     const players = document.getElementById('players').value;
     const key = getQueueKey(terrain, players);
     
-    // Получаем очередь из памяти
     let queue = JSON.parse(localStorage.getItem(key) || "[]");
     
-    // Если очередь пуста, создаем новую на 100+ комбинаций
     if (queue.length === 0) {
         const db = database[terrain];
-        for(let i=0; i<db.objs.length; i++) {
-            for(let j=0; j<db.actions.length; j++) {
-                for(let k=0; k<db.tactics[players].length; k++) {
-                    queue.push({ o: i, a: j, t: k });
-                }
+        // Генерируем комбинации (Легенда x Миссия)
+        for(let l=0; l < db.lores.length; l++) {
+            for(let m=0; m < db.missions.length; m++) {
+                queue.push({ loreIdx: l, missIdx: m });
             }
         }
-        // Перемешиваем очередь (Fisher-Yates)
+        // Перемешивание
         for (let i = queue.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [queue[i], queue[j]] = [queue[j], queue[i]];
         }
     }
 
-    // Берем первую задачу из очереди
     const current = queue.shift();
     localStorage.setItem(key, JSON.stringify(queue));
 
-    // Вывод данных
     const db = database[terrain];
-    const obj = db.objs[current.o];
-    const act = db.actions[current.a];
-    const tac = db.tactics[players][current.t];
+    const lore = db.lores[current.loreIdx];
+    const mission = db.missions[current.missIdx];
+    const tac = tactics[players][Math.floor(Math.random()*tactics[players].length)];
 
-    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + (["ГРОМ", "ТЕНЬ", "БАРС", "ВЕКТОР", "СКОРПИОН", "НОЛЬ", "БУРЯ"][Math.floor(Math.random()*7)]);
-    document.getElementById('out-meta').innerText = `${terrain} | ${players} | ОСТАЛОСЬ: ${queue.length}`;
-    document.getElementById('out-task').innerText = `ЦЕЛЬ: ${obj.toUpperCase()}\nЗАДАЧА: ${act.toUpperCase()}\n\nВВОДНАЯ:\n${tac}`;
+    document.getElementById('out-name').innerText = "ОПЕРАЦИЯ: " + (["ЦУНАМИ", "ГРАНИТ", "КОБРА", "ПРИЗРАК", "МЕТЕОР"][Math.floor(Math.random()*5)]);
+    document.getElementById('out-meta').innerText = `${terrain} | ОСТАЛОСЬ УНИКАЛЬНЫХ СЦЕНАРИЕВ: ${queue.length}`;
+    document.getElementById('out-lore').innerText = lore;
+    document.getElementById('out-task-a').innerText = mission.a + "\n\nРЕКОМЕНДАЦИЯ: " + tac;
+    document.getElementById('out-task-b').innerText = mission.b;
 
+    const hitPresets = [
+        { name: "КЛАССИКА", rules: ["Любой хит — смерть.", "Привод — смерть.", "Рикошет не считается."] },
+        { name: "ТАКТИКА", rules: ["Конечность — ранение (бинт).", "Голова/Корпус — смерть.", "Медик лечит 20 сек."] }
+    ];
     const preset = hitPresets[Math.floor(Math.random()*hitPresets.length)];
     document.getElementById('rules-style-name').innerText = "ПРАВИЛА: " + preset.name;
     const rulesUl = document.getElementById('out-rules');
@@ -151,7 +176,6 @@ function generate() {
     preset.rules.forEach(r => { rulesUl.innerHTML += `<li>${r}</li>`; });
 
     document.getElementById('output').style.display = 'block';
-    document.getElementById('queue-status').innerText = `Уникальных задач в базе: ${queue.length}`;
 }
 </script>
 </body>
