@@ -1,6 +1,5 @@
-const CACHE_NAME = 'scorpion-gen-v4.0';
+const CACHE_NAME = 'scorpion-gen-v4.1'; // Обновляем версию для синхронизации
 
-// Список файлов для кэширования
 const assets = [
   './',
   './index.html',
@@ -8,18 +7,18 @@ const assets = [
   './sw.js'
 ];
 
-// Установка: записываем файлы в память
+// Установка: кэшируем новые файлы
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Scorpion.Gen v4.0: Кэш успешно создан');
+      console.log('Scorpion.Gen v4.1: Кэширование ресурсов...');
       return cache.addAll(assets);
     })
   );
   self.skipWaiting();
 });
 
-// Активация: УДАЛЯЕМ старые версии кэша (v3.5, v3.0 и т.д.)
+// Активация: УДАЛЯЕМ старый кэш v4.0 и ниже
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -33,7 +32,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Стратегия: Сначала смотрим в сеть, если интернета нет — берем из кэша
+// Работа в оффлайне
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request).catch(() => {
