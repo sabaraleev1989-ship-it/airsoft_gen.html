@@ -1,6 +1,5 @@
-const CACHE_NAME = 'scorpion-gen-v2.5';
+const CACHE_NAME = 'scorpion-gen-v3.0'; // Версия 3.0 с умной памятью
 
-// Список файлов для полной работы в оффлайне
 const assets = [
   './',
   './index.html',
@@ -8,36 +7,28 @@ const assets = [
   './sw.js'
 ];
 
-// Установка: скачиваем файлы в память телефона
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Scorpion.Gen: Ресурсы кэшированы');
       return cache.addAll(assets);
     })
   );
   self.skipWaiting();
 });
 
-// Активация: удаляем старый кэш
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
     })
   );
   self.clients.claim();
 });
 
-// Стратегия: Сначала сеть, если связи нет — Кэш
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
